@@ -1,0 +1,404 @@
+/* =====================================================
+   CONTACT MODAL
+   ===================================================== */
+
+html.nx-modal-lock,
+html.nx-modal-lock body {
+  overflow: hidden;
+}
+
+/* Overlay */
+.nx-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+}
+.nx-modal.is-open {
+  display: block;
+}
+
+.nx-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.nx-modal-panel {
+  position: absolute;
+  inset: 0;
+}
+
+/* Fullscreen Panel */
+.nx-modal-stage {
+  position: absolute;
+  inset: 0;
+  display: block;
+  padding: 0;
+}
+
+/* Card - full viewport */
+.nx-modal-card {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background Watermark */
+.nx-cardBg {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+.nx-cardBgImg {
+  width: min(980px, 88vw);
+  opacity: 0.1;
+  filter: blur(2px);
+  transform: translateY(10px);
+}
+
+/* Close Button */
+.nx-closeBtn {
+  position: absolute;
+  top: 26px;
+  right: 26px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  z-index: 6;
+}
+.nx-closeBtn img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Content Scroll Area */
+.nx-cardInner {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  overflow: auto;
+  padding: 88px 90px 140px 90px;
+}
+
+/* Screens */
+.nx-screen {
+  display: none;
+  min-height: 100%;
+}
+.nx-screen.is-active {
+  display: block;
+}
+
+/* Layout blocks */
+.nx-leftBlock {
+  width: 560px;
+  max-width: 100%;
+}
+.nx-leftBlockWide {
+  width: 900px;
+  max-width: 100%;
+}
+
+.nx-screen.is-active > .nx-leftBlock,
+.nx-screen.is-active > .nx-leftBlockWide,
+.nx-screen.is-active > .nx-successBlock {
+  margin-left: 0;
+}
+
+/* Form Fields */
+.nx-field {
+  margin-bottom: 22px;
+}
+.nx-labelRow {
+  margin-bottom: 6px;
+}
+.nx-label {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.65);
+}
+.nx-labelMuted {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.nx-inputLine {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.9);
+  padding: 2px 0 8px 0;
+}
+.nx-inputLine::placeholder {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.nx-line {
+  height: 1px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.35);
+}
+.nx-lineStrong {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* Phone grid */
+.nx-phoneGrid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 14px;
+  align-items: end;
+}
+
+.nx-prefixWrap {
+  position: relative;
+}
+.nx-prefixSelect {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.9);
+  padding: 2px 26px 8px 0;
+  cursor: pointer;
+  appearance: none;
+}
+
+.nx-prefixChevron {
+  position: absolute;
+  right: 6px;
+  top: 14px;
+  width: 10px;
+  height: 10px;
+  transform: rotate(45deg);
+  border-right: 2px solid rgba(0, 0, 0, 0.55);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+/* Pills */
+.nx-group {
+  margin-bottom: 18px;
+}
+.nx-groupTitle {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.65);
+  margin-bottom: 10px;
+}
+.nx-groupLine {
+  height: 1px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  margin-top: 14px;
+}
+
+.nx-pillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.nx-pill {
+  border: 0;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.85);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.nx-pillCheck {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  position: relative;
+  flex: 0 0 16px;
+}
+.nx-pill.is-selected {
+  background: rgba(0, 0, 0, 0.1);
+}
+.nx-pill.is-selected .nx-pillCheck::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* Footer Fixed Bottom */
+.nx-cardFooter {
+  position: sticky;
+  bottom: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 18px;
+  padding: 0 90px 44px 90px;
+  background: transparent;
+}
+
+.nx-footerLeft {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+.nx-footerRight {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nx-navBtn {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.85);
+  padding: 10px 0;
+}
+.nx-navArrow {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.nx-ctaBtn {
+  border: 0;
+  cursor: pointer;
+  background: #e35b2f;
+  color: #fff;
+  font-size: 12px;
+  padding: 10px 18px;
+  border-radius: 10px;
+}
+
+/* Breadcrumb */
+.nx-breadcrumb {
+  font-size: 11px;
+  white-space: nowrap;
+  color: rgba(0, 0, 0, 0.45);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.nx-bcSep {
+  opacity: 0.6;
+}
+.nx-bc.active {
+  color: rgba(0, 0, 0, 0.75);
+}
+.nx-bc {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+/* Success State */
+.nx-successBlock {
+  width: 900px;
+  max-width: 100%;
+}
+.nx-successTitle {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 78px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: rgba(0, 0, 0, 0.95);
+}
+.nx-successSub {
+  margin-top: 12px;
+  font-size: 22px;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+/* Errors & Loading */
+.nx-error {
+  display: none;
+  position: absolute;
+  left: 90px;
+  bottom: 18px;
+  z-index: 6;
+  font-size: 12px;
+  color: #c23;
+}
+.nx-error.is-visible {
+  display: block;
+}
+
+.nx-spinner {
+  display: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+.is-loading .nx-spinner {
+  display: inline-block;
+}
+
+/* EXIT button */
+.nx-exitOnly {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 900px) {
+  .nx-cardInner {
+    padding: 76px 20px 150px 20px;
+  }
+  .nx-cardFooter {
+    padding: 0 20px 22px 20px;
+  }
+  .nx-footerRight {
+    display: none;
+  }
+  .nx-error {
+    left: 20px;
+  }
+  .nx-successTitle {
+    font-size: 46px;
+  }
+  .nx-successSub {
+    font-size: 16px;
+  }
+}
+
+.nx-srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}

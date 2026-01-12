@@ -1,0 +1,188 @@
+<!-- CONTACT MODAL FIGMA FULL -->
+<div class="nx-modal" id="nxContactModal" aria-hidden="true">
+  <div class="nx-modal-backdrop" data-contact-close></div>
+
+  <div class="nx-modal-panel" role="dialog" aria-modal="true" aria-labelledby="nxModalTitle">
+    <div class="nx-modal-stage">
+      <div class="nx-modal-card">
+        <!-- background inside card -->
+        <div class="nx-cardBg" aria-hidden="true">
+          <img class="nx-cardBgImg" src="assets/img/Long_Text.svg" alt="" />
+        </div>
+
+        <!-- close button as IMG -->
+        <button class="nx-closeBtn" type="button" data-contact-close aria-label="Close">
+          <img src="img/icons/close.svg" alt="" />
+        </button>
+
+        <h2 class="nx-srOnly" id="nxModalTitle">Contact</h2>
+
+        <!-- CONTENT AREA -->
+        <div class="nx-cardInner">
+          <!-- SCREEN 1 -->
+          <section class="nx-screen nx-screen-1 is-active" data-step="1">
+            <div class="nx-leftBlock">
+              <div class="nx-field">
+                <div class="nx-labelRow"><span class="nx-label">First name*</span></div>
+                <input class="nx-inputLine" id="nxFirstName" name="firstName" placeholder="Jaden" required />
+                <div class="nx-line"></div>
+              </div>
+
+              <div class="nx-field">
+                <div class="nx-labelRow"><span class="nx-label">Last name*</span></div>
+                <input class="nx-inputLine" id="nxLastName" name="lastName" placeholder="Brown" required />
+                <div class="nx-line"></div>
+              </div>
+
+              <div class="nx-field">
+                <div class="nx-labelRow"><span class="nx-label">Phone number*</span></div>
+
+                <div class="nx-phoneGrid">
+                  <div class="nx-prefixWrap">
+                    <select class="nx-prefixSelect" id="nxPhonePrefix" name="phonePrefix" aria-label="Phone prefix"></select>
+                    <span class="nx-prefixChevron" aria-hidden="true"></span>
+                    <div class="nx-line nx-lineStrong"></div>
+                  </div>
+
+                  <div class="nx-numberWrap">
+                    <input class="nx-inputLine" id="nxPhoneNumber" name="phoneNumber" placeholder="602 642 278" required />
+                    <div class="nx-line"></div>
+                  </div>
+                </div>
+
+                <input type="hidden" id="nxPhone" name="phone" value="" />
+              </div>
+
+              <div class="nx-field">
+                <div class="nx-labelRow"><span class="nx-label">Email*</span></div>
+                <input class="nx-inputLine" id="nxEmail" name="email" placeholder="name@example.com" required />
+                <div class="nx-line"></div>
+              </div>
+
+              <div class="nx-field">
+                <div class="nx-labelRow"><span class="nx-label nx-labelMuted">Company</span></div>
+                <input class="nx-inputLine" id="nxCompany" name="company" placeholder="Example Corporation" />
+                <div class="nx-line"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SCREEN 2 -->
+          <section class="nx-screen nx-screen-2" data-step="2">
+            <div class="nx-leftBlock nx-leftBlockWide">
+              <div class="nx-group">
+                <div class="nx-groupTitle">Brand Design</div>
+                <div class="nx-pillRow">
+                  <button type="button" class="nx-pill" data-pill-value="Logo design"><span class="nx-pillCheck"></span><span class="nx-pillText">Logo design</span></button>
+                  <button type="button" class="nx-pill" data-pill-value="Rebranding"><span class="nx-pillCheck"></span><span class="nx-pillText">Rebranding</span></button>
+                  <button type="button" class="nx-pill" data-pill-value="Product design"><span class="nx-pillCheck"></span><span class="nx-pillText">Product design</span></button>
+                  <button type="button" class="nx-pill" data-pill-value="Messaging"><span class="nx-pillCheck"></span><span class="nx-pillText">Messaging</span></button>
+                </div>
+                <div class="nx-groupLine"></div>
+              </div>
+
+              <div class="nx-group">
+                <div class="nx-groupTitle">Digital Development</div>
+                <div class="nx-pillRow">
+                  <button type="button" class="nx-pill" data-pill-value="Web design"><span class="nx-pillCheck"></span><span class="nx-pillText">Web design</span></button>
+                  <button type="button" class="nx-pill" data-pill-value="Webflow design"><span class="nx-pillCheck"></span><span class="nx-pillText">Webflow design</span></button>
+                  <button type="button" class="nx-pill" data-pill-value="Apps development">
+                    <span class="nx-pillCheck"></span><span class="nx-pillText">Apps development</span>
+                  </button>
+                  <button type="button" class="nx-pill" data-pill-value="Automatizations">
+                    <span class="nx-pillCheck"></span><span class="nx-pillText">Automatizations</span>
+                  </button>
+                </div>
+                <div class="nx-groupLine"></div>
+              </div>
+
+              <div class="nx-group">
+                <div class="nx-groupTitle">Motion and 3D</div>
+                <div class="nx-pillRow">
+                  <button type="button" class="nx-pill" data-pill-value="Motion graphic"><span class="nx-pillCheck"></span><span class="nx-pillText">Motion graphic</span></button>
+                  <button type="button" class="nx-pill" data-pill-value="3D visuals"><span class="nx-pillCheck"></span><span class="nx-pillText">3D visuals</span></button>
+                  <button type="button" class="nx-pill" data-pill-value="Apps Animations">
+                    <span class="nx-pillCheck"></span><span class="nx-pillText">Apps Animations</span>
+                  </button>
+                  <button type="button" class="nx-pill" data-pill-value="Promo visuals"><span class="nx-pillCheck"></span><span class="nx-pillText">Promo visuals</span></button>
+                </div>
+                <div class="nx-groupLine"></div>
+              </div>
+
+              <div class="nx-group">
+                <div class="nx-groupTitle">Campaigns</div>
+                <div class="nx-pillRow">
+                  <button type="button" class="nx-pill" data-pill-value="Ad creatives"><span class="nx-pillCheck"></span><span class="nx-pillText">Ad creatives</span></button>
+                  <button type="button" class="nx-pill" data-pill-value="Strategy"><span class="nx-pillCheck"></span><span class="nx-pillText">Strategy</span></button>
+                  <button type="button" class="nx-pill" data-pill-value="Ads (Meta, TikTok, Google)">
+                    <span class="nx-pillCheck"></span><span class="nx-pillText">Ads (Meta, TikTok, Google)</span>
+                  </button>
+                  <button type="button" class="nx-pill" data-pill-value="Content campaigns">
+                    <span class="nx-pillCheck"></span><span class="nx-pillText">Content campaigns</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SCREEN 3 -->
+          <section class="nx-screen nx-screen-3" data-step="3">
+            <div class="nx-leftBlock">
+              <div class="nx-field nx-fieldMessage">
+                <div class="nx-labelRow"><span class="nx-label">Message (optional)</span></div>
+                <input class="nx-inputLine" id="nxMessage" name="message" placeholder="Tell us about your vision here..." />
+                <div class="nx-line nx-lineStrong"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SCREEN 4 -->
+          <section class="nx-screen nx-screen-4" data-step="4">
+            <div class="nx-successBlock">
+              <div class="nx-successTitle">[YOU’RE IN.]</div>
+              <div class="nx-successSub">Your submission is under review.</div>
+            </div>
+          </section>
+        </div>
+
+        <!-- FOOTER fixed bottom -->
+        <div class="nx-cardFooter">
+          <div class="nx-footerLeft">
+            <button class="nx-navBtn" type="button" data-contact-back>
+              <span class="nx-navArrow">←</span>
+              <span class="nx-navText" data-back-text>Previous step</span>
+            </button>
+
+            <button class="nx-ctaBtn" type="button" data-contact-next>Continue</button>
+
+            <button class="nx-ctaBtn nx-ctaBtnSubmit" type="button" data-contact-submit>
+              <span class="nx-submitText">Submit</span>
+              <span class="nx-spinner" aria-hidden="true"></span>
+            </button>
+
+            <button class="nx-ctaBtn nx-ctaBtnGhost" type="button" data-contact-inspiration>Inspiration</button>
+
+            <button class="nx-navBtn nx-exitOnly" type="button" data-contact-close>
+              <span class="nx-navArrow">←</span>
+              <span class="nx-navText">Exit</span>
+            </button>
+          </div>
+
+          <div class="nx-footerRight">
+            <span class="nx-breadcrumb">
+              <span class="nx-bc bc-1">Contact information</span>
+              <span class="nx-bcSep">›</span>
+              <span class="nx-bc bc-2">Service(s) of interest</span>
+              <span class="nx-bcSep">›</span>
+              <span class="nx-bc bc-3">Submit</span>
+            </span>
+
+            <span class="nx-noteRight" data-success-note> We’ll get back to you within 24 hours with next steps. </span>
+          </div>
+        </div>
+
+        <div class="nx-error" data-contact-error></div>
+      </div>
+    </div>
+  </div>
+</div>

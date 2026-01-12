@@ -1,0 +1,73 @@
+/* ================================================
+   HERO VIDEO COMPONENT
+   ================================================ */
+
+.hero-video-zone {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* Lebar sejajar dengan .fx-lines */
+  width: calc(100% - 160px) !important;
+  max-width: 1500px !important;
+
+  height: 640px;
+  border-radius: 20px;
+  overflow: hidden;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+.hero-video {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 160px;
+  height: 90px;
+
+  border-radius: 5px;
+  object-fit: cover;
+  pointer-events: none;
+
+  will-change: transform, width, height;
+  z-index: 11;
+  opacity: 1;
+}
+
+/* Responsive adjustment for Mobile/Tablet */
+@media (max-width: 900px) {
+  .hero-video-zone {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin-top: 8px !important;
+    width: calc(100% - 80px) !important;
+    max-width: 720px !important;
+    height: clamp(180px, 32vh, 320px) !important;
+    border-radius: 15px !important;
+    z-index: 10 !important;
+    opacity: 1 !important;
+  }
+
+  .hero-video {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: inherit !important;
+    transform: none !important;
+    display: block !important;
+    opacity: 1 !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-video-zone {
+    max-width: 460px !important;
+  }
+}

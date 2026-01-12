@@ -1,0 +1,450 @@
+/* ===============================
+   TOP BAR
+=============================== */
+.nx-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 998;
+  background: transparent;
+  pointer-events: none;
+}
+
+.nx-topbar-inner {
+  max-width: 1500px;
+  width: calc(100% - 160px);
+  margin: 0 auto;
+  padding: 40px 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: auto;
+}
+
+.nx-topbar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nx-topbar-item--left {
+  /* Aligns with start of nx-topbar-inner */
+}
+
+.nx-topbar-item--center {
+  /* Aligns with center of nx-topbar-inner */
+}
+
+.nx-topbar-item--right {
+  /* Aligns with end of nx-topbar-inner */
+}
+
+.nx-topbar-title {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.nx-topbar-sub {
+  font-weight: 500;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.nx-topbar-title,
+.nx-topbar-sub {
+  transition: color 420ms cubic-bezier(0.16, 1, 0.3, 1), opacity 420ms ease;
+}
+
+/* LIGHT */
+.nx-topbar.is-light .nx-topbar-title {
+  color: #000;
+}
+
+.nx-topbar.is-light .nx-topbar-sub {
+  color: #767676;
+}
+
+/* DARK */
+.nx-topbar.is-dark .nx-topbar-title,
+.nx-topbar.is-dark .nx-topbar-sub {
+  color: #fff;
+}
+
+main {
+  padding-top: 72px;
+}
+
+@media (max-width: 900px) {
+  .nx-topbar-inner {
+    width: calc(100% - 80px);
+    max-width: 720px;
+    padding: 18px 0;
+  }
+
+  .nx-topbar-title,
+  .nx-topbar-sub {
+    font-size: 12px;
+  }
+
+  .nx-topbar-item--center,
+  .nx-topbar-item--right {
+    display: none;
+  }
+
+  .nx-topbar-item--left {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .nx-topbar-inner {
+    padding: 14px 14px;
+  }
+
+  .nx-topbar-title,
+  .nx-topbar-sub {
+    font-size: 11px;
+  }
+}
+
+/* =====================================================
+   HERO BOTTOM WRAPPER
+===================================================== */
+.ns-hero-bottom-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 40px;
+  z-index: 998;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   HERO BOTTOM BAR (pill + mode)
+===================================================== */
+.ns-hero-bottom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  pointer-events: auto;
+}
+
+/* =====================================================
+   PILL – FROSTED GLASS
+===================================================== */
+.ns-bottom-pill {
+  position: relative;
+  box-sizing: border-box;
+
+  height: 50px;
+  width: 314px;
+  padding: 4px;
+
+  background: rgba(180, 180, 180, 0.2);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border-radius: 20px;
+
+  display: grid;
+  grid-template-columns: 102px 102px 102px;
+  align-items: center;
+
+  z-index: 1;
+}
+
+/* glass border */
+.ns-bottom-pill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* =====================================================
+   SLIDER
+===================================================== */
+.ns-pill-slider {
+  position: absolute;
+  left: 0;
+  top: 50%;
+
+  width: 102px;
+  height: 42px;
+
+  background: #f55629;
+  border-radius: 15px;
+
+  transform: translate3d(0, -50%, 0);
+  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1), width 520ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  z-index: 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* =====================================================
+   LOGO BUTTON
+===================================================== */
+.ns-icon-btn {
+  position: relative;
+  overflow: hidden;
+
+  width: 102px;
+  height: 42px;
+  border-radius: 15px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  z-index: 1;
+}
+
+/* =====================================================
+   CENTER BUTTONS
+===================================================== */
+.ns-bottom-center {
+  grid-column: 2 / 4;
+  display: grid;
+  grid-template-columns: 102px 102px;
+  align-items: center;
+  z-index: 1;
+}
+
+.ns-bottom-btn {
+  width: 102px;
+  height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+  border: none;
+  background: transparent;
+
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+
+  color: #000;
+  cursor: pointer;
+
+  transition: color 220ms ease;
+}
+
+.ns-bottom-btn.is-active {
+  color: #fff;
+}
+
+/* =====================================================
+   MODE BUTTON (BRIGHTNESS)
+===================================================== */
+.ns-mode-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 20px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(180, 180, 180, 0.2);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  transition: background-color 260ms ease, transform 260ms ease;
+}
+
+/* glass border */
+.ns-mode-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.ns-mode-btn.is-hover {
+  background: #f55629;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transform: scale(1.03);
+}
+
+/* =====================================================
+   ICONS
+===================================================== */
+.ns-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  transition: opacity 220ms ease;
+}
+
+.ns-icon-btn .ns-img {
+  width: 27.7px;
+  height: 23px;
+}
+
+.ns-mode-btn .ns-img {
+  width: 24px;
+  height: 24px;
+}
+
+.ns-img--dark {
+  opacity: 0;
+}
+
+/* =====================================================
+   DARK MODE STATES
+===================================================== */
+.ns-hero-bottom.is-dark .ns-bottom-btn {
+  color: #fff;
+}
+
+.ns-hero-bottom.is-dark .ns-img--light {
+  opacity: 0;
+}
+
+.ns-hero-bottom.is-dark .ns-img--dark {
+  opacity: 1;
+}
+
+/* =====================================================
+   FORCE WHITE ICONS ON HOVER (LOGO + BRIGHTNESS)
+===================================================== */
+
+/* LOGO hover → bílé logo */
+.ns-hero-bottom.hover-logo .ns-icon-btn .ns-img--light {
+  opacity: 0;
+}
+
+.ns-hero-bottom.hover-logo .ns-icon-btn .ns-img--dark {
+  opacity: 1;
+}
+
+/* BRIGHTNESS hover → bílé ikony */
+.ns-mode-btn.is-hover .ns-img--light {
+  opacity: 0;
+}
+
+.ns-mode-btn.is-hover .ns-img--dark {
+  opacity: 1;
+}
+/* =====================================================
+   MOBILE SCALE FIX (SCALE JAKO CELEK)
+===================================================== */
+@media (max-width: 900px) {
+  .ns-hero-bottom-wrap {
+    bottom: 18px;
+  }
+
+  .ns-hero-bottom {
+    transform: scale(0.88);
+    transform-origin: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .ns-hero-bottom {
+    transform: scale(0.82);
+    transform-origin: center;
+  }
+}
+
+/* SCROLL DOWN */
+#scrollHint {
+  position: fixed;
+  bottom: 40px;
+  right: 72px;
+  z-index: 2500;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
+  color: #000;
+
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+.ns-scroll-text {
+  white-space: nowrap;
+}
+
+/* ICON */
+.ns-scroll-mouse {
+  width: 16px;
+  height: 24px;
+  border: 2px solid #000;
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  background: transparent;
+
+  transform-origin: center;
+  transition: background 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+}
+
+/* KOLEČKO – fakt kruh uprostřed */
+.ns-scroll-wheel {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #000;
+  transform: translateY(-5px);
+  transition: transform 0.35s ease, background 0.35s ease;
+}
+
+/* Stav při scrollu dolů – kolečko sjede a změní se barvy */
+.ns-scroll--down .ns-scroll-mouse {
+  background: #000;
+  border-color: #000;
+  transform: scale(0.9);
+}
+
+.ns-scroll--down .ns-scroll-wheel {
+  transform: translateY(7px);
+  background: #fff;
+}
+
+/* Stav skrytý – pro fade out před display:none */
+.ns-scroll--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  #scrollHint {
+    display: none !important;
+  }
+}

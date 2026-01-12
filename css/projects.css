@@ -1,0 +1,299 @@
+/* ============================
+   SCROLL TEXT + CARDS (PROJECTS)
+   ============================ */
+
+#scroll-showcase {
+  --sr-page-bg: #f5f5f5;
+  --sr-section-pad: 60px;
+
+  --sr-label-w: 170px;
+  --sr-col-gap: 40px;
+
+  --sr-h1-size: 120px;
+  --sr-h1-line: 0.98;
+  --sr-h1-track: -0.04em;
+
+  --sr-gap: 20px;
+  --sr-card-w: 645px;
+  --sr-card-h: 559px;
+
+  --sr-text-max: 2600px;
+
+  position: relative;
+  background: var(--sr-page-bg);
+}
+
+#scroll-showcase .sr-pin {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: var(--sr-page-bg);
+}
+
+#scroll-showcase .sr-textWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  padding: var(--sr-section-pad);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: opacity;
+}
+
+#scroll-showcase .sr-textBlock {
+  max-width: 1500px;
+  width: calc(100% - 160px);
+}
+
+#scroll-showcase .sr-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sr-col-gap);
+}
+
+#scroll-showcase .sr-label {
+  width: var(--sr-label-w);
+  flex: 0 0 var(--sr-label-w);
+  font-size: 20px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #121212;
+  line-height: 1;
+  white-space: nowrap;
+  font-family: "Poppins", sans-serif;
+}
+
+#scroll-showcase .sr-headline {
+  margin: 0;
+  font-weight: 400;
+  font-size: var(--sr-h1-size);
+  line-height: var(--sr-h1-line);
+  letter-spacing: var(--sr-h1-track);
+  word-break: keep-all;
+  overflow-wrap: normal;
+  font-family: "Poppins", sans-serif;
+  color: #121212;
+}
+
+#scroll-showcase .sr-headline--rest {
+  margin-top: 0;
+  padding-left: 0;
+}
+
+#scroll-showcase .sr-line {
+  display: block;
+  white-space: nowrap;
+}
+
+#scroll-showcase .ch {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  display: inline-block;
+  will-change: opacity, transform, filter;
+}
+
+#scroll-showcase .sr-gridWrap {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 3;
+  pointer-events: none;
+}
+
+#scroll-showcase .sr-grid {
+  width: min(1400px, calc(100vw - 120px));
+  display: grid;
+  grid-template-columns: var(--sr-card-w) var(--sr-card-w);
+  gap: var(--sr-gap);
+  justify-content: center;
+  transform: translateY(140vh);
+  pointer-events: auto;
+  will-change: transform;
+}
+
+#scroll-showcase .sr-card {
+  width: var(--sr-card-w);
+  height: var(--sr-card-h);
+  background: #0b0b0b;
+  border-radius: 22px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform;
+}
+
+#scroll-showcase .sr-cardInner {
+  flex: 1;
+  position: relative;
+  background: #dcdcdc;
+  border-radius: 16px 16px 12px 12px;
+  overflow: hidden;
+  contain: paint;
+}
+
+#scroll-showcase .sr-mainImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.35s ease;
+  will-change: transform;
+}
+
+#scroll-showcase .sr-tags {
+  position: absolute;
+  left: 20px;
+  bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 2;
+  align-items: flex-start;
+}
+
+#scroll-showcase .sr-tags span {
+  display: inline-flex;
+  width: fit-content;
+  background: rgba(18, 18, 18, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  font-family: "BPdots", monospace !important;
+  color: #fff;
+  font-size: 16px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#scroll-showcase .sr-footer {
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+}
+
+#scroll-showcase .sr-footerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-family: "Poppins", sans-serif;
+}
+
+#scroll-showcase .sr-footerLeft img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+#scroll-showcase .sr-year {
+  font-size: 16px;
+  letter-spacing: 0.06em;
+}
+
+#scroll-showcase .sr-card:nth-child(2n) {
+  transform: translateY(140px);
+}
+
+#scroll-showcase .sr-pin,
+#scroll-showcase .sr-textWrap,
+#scroll-showcase .sr-grid,
+#scroll-showcase .sr-card,
+#scroll-showcase .sr-mainImage {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #scroll-showcase .sr-card:hover {
+    box-shadow: 0 26px 80px rgba(0, 0, 0, 0.16);
+  }
+  #scroll-showcase .sr-card:hover .sr-mainImage {
+    transform: scale(1.08);
+  }
+  #scroll-showcase .sr-card:nth-child(2n + 1):hover {
+    transform: scale(1.01);
+  }
+  #scroll-showcase .sr-card:nth-child(2n):hover {
+    transform: translateY(140px) scale(1.01);
+  }
+}
+
+/* ============================
+   RESPONSIVE
+   ============================ */
+
+@media (max-width: 980px) {
+  #scroll-showcase {
+    --sr-section-pad: 28px;
+    --sr-h1-size: 72px;
+    --sr-h1-line: 1.03;
+    --sr-text-max: 720px;
+  }
+
+  #scroll-showcase .sr-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  #scroll-showcase .sr-label {
+    width: auto;
+    flex: auto;
+  }
+
+  #scroll-showcase .sr-line {
+    white-space: normal;
+  }
+
+  #scroll-showcase .sr-grid {
+    width: calc(100vw - 80px) !important;
+    max-width: none !important;
+    grid-template-columns: 1fr !important;
+    justify-content: center;
+    transform: none;
+  }
+
+  #scroll-showcase .sr-card {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 645 / 559;
+  }
+
+  #scroll-showcase .sr-card:nth-child(2n) {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 520px) {
+  #scroll-showcase {
+    --sr-section-pad: 22px;
+    --sr-h1-size: 52px;
+    --sr-gap: 14px;
+  }
+
+  #scroll-showcase .sr-tags {
+    left: 14px;
+    bottom: 14px;
+    gap: 6px;
+  }
+
+  #scroll-showcase .sr-tags span {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}

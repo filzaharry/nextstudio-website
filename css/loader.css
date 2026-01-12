@@ -1,0 +1,115 @@
+/* ============================
+   LOADING ANIMATION
+   ============================ */
+
+.nx-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999999999999;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(0);
+  transition: transform 1s ease-in-out;
+}
+
+.nx-loader-hide {
+  transform: translateY(-100vh);
+}
+
+.nx-loader-inner {
+  text-align: left;
+}
+
+.nx-loader-content {
+  display: inline-block;
+  text-align: left;
+}
+
+.nx-loader-text {
+  font-family: "BPdots", monospace !important;
+  font-size: 50px;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.nx-loader-lines {
+  position: relative;
+  width: 400px;
+  height: 4px;
+  margin-top: 0;
+  background: #dddddd;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.nx-loader-line-red {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: #f55629;
+  transition: width 0.1s linear;
+}
+
+.nx-loader-subtext {
+  margin-top: 12px;
+  font-family: "Poppins", monospace;
+  font-size: 14px;
+  color: #767676;
+  letter-spacing: 0;
+  animation: nx-blink 1.5s ease-in-out infinite;
+}
+
+@keyframes nx-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Hide bottom bar while loader is visible */
+.nx-loader ~ main .ns-hero-bottom,
+.nx-loader ~ main #scrollHint {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+/* ============================
+   RESPONSIVE
+   ============================ */
+
+@media (max-width: 900px) {
+  .nx-loader-inner {
+    padding: 0 24px;
+  }
+
+  .nx-loader-text {
+    font-size: 32px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .nx-loader-lines {
+    width: 260px;
+    height: 4px;
+  }
+}
+
+@media (max-width: 600px) {
+  .nx-loader-text {
+    font-size: 26px;
+    margin-bottom: 14px;
+  }
+
+  .nx-loader-lines {
+    width: 220px;
+    height: 3px;
+  }
+}
