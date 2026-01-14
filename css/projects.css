@@ -237,12 +237,46 @@
    RESPONSIVE
    ============================ */
 
+@media (max-width: 1400px) {
+  #scroll-showcase {
+    --sr-h1-size: 88px;
+  }
+
+  #scroll-showcase .sr-textWrap {
+    padding: 0;
+  }
+
+  #scroll-showcase .sr-textBlock {
+    max-width: 1500px;
+    width: calc(100% - 160px);
+  }
+
+  #scroll-showcase .sr-grid {
+    width: calc(100% - 160px) !important;
+    max-width: 1500px !important;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #scroll-showcase .sr-card {
+    width: 100% !important;
+  }
+
+  #scroll-showcase .sr-label {
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 980px) {
   #scroll-showcase {
     --sr-section-pad: 28px;
     --sr-h1-size: 72px;
     --sr-h1-line: 1.03;
     --sr-text-max: 720px;
+  }
+
+  .sr-textBlock {
+    width: 90% !important;
+    margin: 0 auto;
   }
 
   #scroll-showcase .sr-row {

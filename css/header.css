@@ -96,6 +96,9 @@ main {
   .nx-topbar-item--left {
     margin-right: 0;
   }
+  .nx-topbar-inner {
+    margin: 0;
+  }
 }
 
 @media (max-width: 480px) {

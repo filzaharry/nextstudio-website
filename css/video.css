@@ -37,6 +37,19 @@
   opacity: 1;
 }
 
+/* Responsive adjustment for Desktop */
+@media (max-width: 1400px) {
+  .hero-video-zone {
+    width: calc(100% - 160px) !important;
+    max-width: 1500px !important;
+  }
+
+  .hero-video {
+    width: 160px;
+    height: 90px;
+  }
+}
+
 /* Responsive adjustment for Mobile/Tablet */
 @media (max-width: 900px) {
   .hero-video-zone {
@@ -69,5 +82,11 @@
 @media (max-width: 600px) {
   .hero-video-zone {
     max-width: 460px !important;
+    height: 180px !important;
+    background-color: red;
+  }
+  .hero-video {
+    width: 160px;
+    height: 180px !important;
   }
 }
