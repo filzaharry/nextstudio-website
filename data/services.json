@@ -1,0 +1,62 @@
+[
+  {
+    "title": {
+      "text": "Brand Design",
+      "position": "left"
+    },
+    "content": {
+      "subtitle": "Helping brands shape a clear and memorable identity that stands out and builds the trust needed to turn customers into loyal fans.",
+      "tags": ["[LOGO DESIGN]", "[REBRANDING]", "[VISUAL IDENTITY]", "[MESSAGING]", "[BRAND GUIDELINES]"],
+      "position": "center"
+    },
+    "image": {
+      "url": "assets/img/card/card_1.png",
+      "position": "right"
+    }
+  },
+  {
+    "title": {
+      "text": "Digital Development",
+      "position": "left"
+    },
+    "content": {
+      "subtitle": "Building digital products that feel effortless to use and give businesses the tools, systems and experiences that help them grow smoothly.",
+      "tags": ["[WEB DESIGN]", "[WEBFLOW BUILD]", "[APPS DEVELOPMENT]", "[UI]", "[UX]", "[AUTOMATIZATION]"],
+      "position": "right"
+    },
+    "image": {
+      "url": "assets/img/card/card_2.png",
+      "position": "center"
+    }
+  },
+  {
+    "title": {
+      "text": "Motion and 3D",
+      "position": "right"
+    },
+    "content": {
+      "subtitle": "Turning ideas into dynamic visuals and animations that elevate your message and give your brand the striking presence it needs.",
+      "tags": ["[MOTION GRAPHICS]", "[3D VISUALS]", "[ANIMATIONS]", "[PRODUCT RENDERS]", "[PROMO VISUALS]"],
+      "position": "center"
+    },
+    "image": {
+      "url": "assets/img/card/card_3.png",
+      "position": "left"
+    }
+  },
+  {
+    "title": {
+      "text": "Campaigns",
+      "position": "left"
+    },
+    "content": {
+      "subtitle": "Creating campaigns with clear strategy and strong creative that reach the right people and turn their attention into real results.",
+      "tags": ["[AD CREATIVE]", "[STRATEGY]", "[ADS]", "[CONTENT CAMPAIGNS]", "[SOCIAL CAMPAIGNS]"],
+      "position": "center"
+    },
+    "image": {
+      "url": "assets/img/card/card_4.png",
+      "position": "right"
+    }
+  }
+]
