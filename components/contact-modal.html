@@ -6,13 +6,13 @@
     <div class="nx-modal-stage">
       <div class="nx-modal-card">
         <!-- background inside card -->
-        <div class="nx-cardBg" aria-hidden="true">
+        <!-- <div class="nx-cardBg" aria-hidden="true">
           <img class="nx-cardBgImg" src="assets/img/Long_Text.svg" alt="" />
-        </div>
+        </div> -->
 
         <!-- close button as IMG -->
         <button class="nx-closeBtn" type="button" data-contact-close aria-label="Close">
-          <img src="img/icons/close.svg" alt="" />
+          <img src="assets/img/Cross.svg" alt="" />
         </button>
 
         <h2 class="nx-srOnly" id="nxModalTitle">Contact</h2>
@@ -60,7 +60,7 @@
               </div>
 
               <div class="nx-field">
-                <div class="nx-labelRow"><span class="nx-label nx-labelMuted">Company</span></div>
+                <div class="nx-labelRow"><span class="nx-label">Company</span></div>
                 <input class="nx-inputLine" id="nxCompany" name="company" placeholder="Example Corporation" />
                 <div class="nx-line"></div>
               </div>
@@ -148,6 +148,11 @@
         <!-- FOOTER fixed bottom -->
         <div class="nx-cardFooter">
           <div class="nx-footerLeft">
+            <button class="nx-navBtn nx-exitOnly" type="button" data-contact-close>
+              <span class="nx-navArrow">←</span>
+              <span class="nx-navText">Exit</span>
+            </button>
+
             <button class="nx-navBtn" type="button" data-contact-back>
               <span class="nx-navArrow">←</span>
               <span class="nx-navText" data-back-text>Previous step</span>
@@ -161,11 +166,6 @@
             </button>
 
             <button class="nx-ctaBtn nx-ctaBtnGhost" type="button" data-contact-inspiration>Inspiration</button>
-
-            <button class="nx-navBtn nx-exitOnly" type="button" data-contact-close>
-              <span class="nx-navArrow">←</span>
-              <span class="nx-navText">Exit</span>
-            </button>
           </div>
 
           <div class="nx-footerRight">
@@ -178,6 +178,9 @@
             </span>
 
             <span class="nx-noteRight" data-success-note> We’ll get back to you within 24 hours with next steps. </span>
+
+            <!-- gambar(2) posisikan di ujung kanan -->
+            <img src="assets/img/Small_Logo_Black.svg" class="nx-footerImg" alt="Logo" />
           </div>
         </div>
 

@@ -42,12 +42,25 @@ html.nx-modal-lock body {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: #fff;
+  background: rgba(30, 30, 30, 0.75);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   border-radius: 0;
   overflow: hidden;
   box-shadow: none;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Theme Adaptive Colors */
+.nx-modal.is-light .nx-modal-card {
+  background: rgba(245, 245, 245, 0.75);
+  color: #000;
+}
+.nx-modal.is-dark .nx-modal-card {
+  background: rgba(30, 30, 30, 0.75);
+  color: #fff;
 }
 
 /* Background Watermark */
@@ -69,15 +82,31 @@ html.nx-modal-lock body {
 /* Close Button */
 .nx-closeBtn {
   position: absolute;
-  top: 26px;
-  right: 26px;
-  width: 34px;
-  height: 34px;
+  top: 40px;
+  right: 40px;
+  width: 48px;
+  height: 48px;
   border: 0;
-  background: transparent;
-  padding: 0;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  padding: 14px;
   cursor: pointer;
   z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.4s ease, transform 0.2s ease, filter 0.4s ease;
+}
+.nx-closeBtn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+.nx-modal.is-dark .nx-closeBtn {
+  background: rgba(255, 255, 255, 0.15);
+  filter: none;
+}
+.nx-modal.is-dark .nx-closeBtn img {
+  filter: invert(1);
 }
 .nx-closeBtn img {
   width: 100%;
@@ -127,11 +156,19 @@ html.nx-modal-lock body {
   margin-bottom: 6px;
 }
 .nx-label {
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.65);
+  font-size: var(--font-size-sm);
+  color: #000;
+  transition: color 0.4s ease;
+}
+.nx-modal.is-dark .nx-label {
+  color: #fff;
 }
 .nx-labelMuted {
-  color: rgba(0, 0, 0, 0.45);
+  color: #666;
+  transition: color 0.4s ease;
+}
+.nx-modal.is-dark .nx-labelMuted {
+  color: #aaa;
 }
 
 .nx-inputLine {
@@ -139,33 +176,49 @@ html.nx-modal-lock body {
   border: 0;
   outline: none;
   background: transparent;
-  font-size: 16px;
-  color: rgba(0, 0, 0, 0.9);
+  font-size: var(--font-size-sm);
+  color: #000;
   padding: 2px 0 8px 0;
+  transition: color 0.4s ease;
 }
+.nx-modal.is-dark .nx-inputLine {
+  color: #fff;
+}
+
 .nx-inputLine::placeholder {
-  color: rgba(0, 0, 0, 0.35);
+  color: #999;
+  font-size: var(--font-size-sm);
 }
 
 .nx-line {
-  height: 1px;
+  height: 3px;
   width: 100%;
   background: rgba(0, 0, 0, 0.35);
+  transition: background 0.4s ease;
+}
+.nx-modal.is-dark .nx-line {
+  background: rgba(255, 255, 255, 0.25);
 }
 .nx-lineStrong {
+  height: 3px;
   background: rgba(0, 0, 0, 0.55);
+  transition: background 0.4s ease;
+}
+.nx-modal.is-dark .nx-lineStrong {
+  background: rgba(255, 255, 255, 0.45);
 }
 
 /* Phone grid */
 .nx-phoneGrid {
   display: grid;
-  grid-template-columns: 150px 1fr;
+  grid-template-columns: 50px 1fr;
   gap: 14px;
   align-items: end;
 }
 
 .nx-prefixWrap {
   position: relative;
+  max-width: 50px;
 }
 .nx-prefixSelect {
   width: 100%;
@@ -173,22 +226,30 @@ html.nx-modal-lock body {
   outline: none;
   background: transparent;
   font-size: 16px;
-  color: rgba(0, 0, 0, 0.9);
+  color: #000;
   padding: 2px 26px 8px 0;
   cursor: pointer;
   appearance: none;
+  transition: color 0.4s ease;
+}
+.nx-modal.is-dark .nx-prefixSelect {
+  color: #fff;
 }
 
 .nx-prefixChevron {
   position: absolute;
   right: 6px;
-  top: 14px;
-  width: 10px;
-  height: 10px;
-  transform: rotate(45deg);
-  border-right: 2px solid rgba(0, 0, 0, 0.55);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+  top: 40%;
+  width: 8px;
+  height: 8px;
+  transform: translateY(-50%) rotate(45deg);
+  border-right: 2px solid #333;
+  border-bottom: 2px solid #333;
   pointer-events: none;
+  transition: border-color 0.4s ease;
+}
+.nx-modal.is-dark .nx-prefixChevron {
+  border-color: #fff;
 }
 
 /* Pills */
@@ -223,6 +284,11 @@ html.nx-modal-lock body {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+.nx-modal.is-dark .nx-pill {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
 }
 .nx-pillCheck {
   width: 16px;
@@ -231,9 +297,16 @@ html.nx-modal-lock body {
   border: 1px solid rgba(0, 0, 0, 0.35);
   position: relative;
   flex: 0 0 16px;
+  transition: border-color 0.4s ease;
+}
+.nx-modal.is-dark .nx-pillCheck {
+  border-color: rgba(255, 255, 255, 0.4);
 }
 .nx-pill.is-selected {
   background: rgba(0, 0, 0, 0.1);
+}
+.nx-modal.is-dark .nx-pill.is-selected {
+  background: rgba(255, 255, 255, 0.2);
 }
 .nx-pill.is-selected .nx-pillCheck::after {
   content: "";
@@ -241,6 +314,9 @@ html.nx-modal-lock body {
   inset: 4px;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.75);
+}
+.nx-modal.is-dark .nx-pill.is-selected .nx-pillCheck::after {
+  background: rgba(255, 255, 255, 0.9);
 }
 
 /* Footer Fixed Bottom */
@@ -265,7 +341,16 @@ html.nx-modal-lock body {
   margin-left: auto;
   display: inline-flex;
   align-items: center;
-  gap: 18px;
+  gap: 24px;
+}
+
+.nx-footerImg {
+  height: 24px;
+  width: auto;
+  transition: filter 0.4s ease;
+}
+.nx-modal.is-dark .nx-footerImg {
+  filter: invert(1);
 }
 
 .nx-navBtn {
@@ -275,9 +360,14 @@ html.nx-modal-lock body {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 500;
   color: rgba(0, 0, 0, 0.85);
   padding: 10px 0;
+  transition: color 0.4s ease;
+}
+.nx-modal.is-dark .nx-navBtn {
+  color: rgba(255, 255, 255, 0.85);
 }
 .nx-navArrow {
   font-size: 16px;
@@ -289,9 +379,14 @@ html.nx-modal-lock body {
   cursor: pointer;
   background: #e35b2f;
   color: #fff;
-  font-size: 12px;
-  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 24px;
   border-radius: 10px;
+  transition: opacity 0.2s;
+}
+.nx-ctaBtn:hover {
+  opacity: 0.9;
 }
 
 /* Breadcrumb */
@@ -309,8 +404,15 @@ html.nx-modal-lock body {
 .nx-bc.active {
   color: rgba(0, 0, 0, 0.75);
 }
+.nx-modal.is-dark .nx-bc.active {
+  color: rgba(255, 255, 255, 0.9);
+}
 .nx-bc {
   color: rgba(0, 0, 0, 0.35);
+  transition: color 0.4s ease;
+}
+.nx-modal.is-dark .nx-bc {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 /* Success State */
@@ -324,11 +426,19 @@ html.nx-modal-lock body {
   line-height: 1;
   letter-spacing: 0.02em;
   color: rgba(0, 0, 0, 0.95);
+  transition: color 0.4s ease;
+}
+.nx-modal.is-dark .nx-successTitle {
+  color: #fff;
 }
 .nx-successSub {
   margin-top: 12px;
   font-size: 22px;
   color: rgba(0, 0, 0, 0.85);
+  transition: color 0.4s ease;
+}
+.nx-modal.is-dark .nx-successSub {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* Errors & Loading */

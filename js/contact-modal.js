@@ -41,6 +41,48 @@ document.addEventListener("componentsLoaded", () => {
   let submitting = false;
   const selected = new Set();
 
+  // THEME ADAPTIVE LOGIC
+  function rgbToArray(rgb) {
+    const m = rgb.match(/\d+/g);
+    return m ? m.map(Number) : [255, 255, 255];
+  }
+
+  function luminance([r, g, b]) {
+    return (r * 299 + g * 587 + b * 114) / 1000;
+  }
+
+  function getBgColorAt(x, y) {
+    const prev = modal.style.pointerEvents;
+    modal.style.pointerEvents = "none";
+    const el = document.elementFromPoint(x, y);
+    modal.style.pointerEvents = prev;
+    if (!el) return "rgb(255,255,255)";
+    let current = el;
+    while (current && current !== document.documentElement) {
+      const bg = getComputedStyle(current).backgroundColor;
+      if (bg && bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent") return bg;
+      current = current.parentElement;
+    }
+    return "rgb(255,255,255)";
+  }
+
+  function updateModalTheme() {
+    if (!modal.classList.contains("is-open")) return;
+    const rect = modal.getBoundingClientRect();
+    const samples = [
+      { x: rect.left + rect.width * 0.2, y: rect.top + rect.height * 0.2 },
+      { x: rect.left + rect.width * 0.5, y: rect.top + rect.height * 0.5 },
+      { x: rect.left + rect.width * 0.8, y: rect.top + rect.height * 0.8 },
+    ];
+    let total = 0;
+    samples.forEach((s) => {
+      total += luminance(rgbToArray(getBgColorAt(s.x, s.y)));
+    });
+    const avg = total / samples.length;
+    modal.classList.toggle("is-dark", avg < 140);
+    modal.classList.toggle("is-light", avg >= 140);
+  }
+
   function digitsOnly(v) {
     return String(v || "").replace(/\D+/g, "");
   }
@@ -84,6 +126,7 @@ document.addEventListener("componentsLoaded", () => {
     });
     showError("");
     setControls();
+    updateModalTheme();
   }
 
   function openModal() {
@@ -91,6 +134,7 @@ document.addEventListener("componentsLoaded", () => {
     modal.setAttribute("aria-hidden", "false");
     document.documentElement.classList.add("nx-modal-lock");
     setStep(1);
+    updateModalTheme();
     setTimeout(() => fields.firstName?.focus(), 30);
   }
 
@@ -222,17 +266,18 @@ document.addEventListener("componentsLoaded", () => {
   // Prefix population
   if (phonePrefix) {
     const prefixItems = [
-      { name: "Czechia", dial: "+420" },
-      { name: "Slovakia", dial: "+421" },
-      { name: "Germany", dial: "+49" },
-      { name: "Austria", dial: "+43" },
-      { name: "Poland", dial: "+48" },
-      { name: "United Kingdom", dial: "+44" },
-      { name: "United States", dial: "+1" },
+      { name: "Czechia", dial: "+420", flag: "🇨🇿" },
+      { name: "Slovakia", dial: "+421", flag: "🇸🇰" },
+      { name: "Germany", dial: "+49", flag: "🇩🇪" },
+      { name: "Austria", dial: "+43", flag: "🇦🇹" },
+      { name: "Poland", dial: "+48", flag: "🇵🇱" },
+      { name: "United Kingdom", dial: "+44", flag: "🇬🇧" },
+      { name: "United States", dial: "+1", flag: "🇺🇸" },
+      { name: "Indonesia", dial: "+62", flag: "🇮🇩" },
     ];
     const hasRealOptions = phonePrefix.querySelectorAll("option").length > 1;
     if (!hasRealOptions) {
-      phonePrefix.innerHTML = prefixItems.map((i) => `<option value="${i.dial}">${i.dial} ${i.name}</option>`).join("");
+      phonePrefix.innerHTML = prefixItems.map((i) => `<option value="${i.dial}">${i.flag}</option>`).join("");
     }
     if (!phonePrefix.value) phonePrefix.value = "+420";
   }
