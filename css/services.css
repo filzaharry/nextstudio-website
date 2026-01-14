@@ -66,6 +66,8 @@
   max-width: 1500px;
   width: calc(100% - 160px);
   margin: 0 auto;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .cards-container {

@@ -14,9 +14,15 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
   padding: 20px;
-  transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s ease;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease;
   cursor: pointer;
   background-color: var(--color-card-secondary);
+  will-change: transform;
+}
+
+.service-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .service-card:nth-child(1) {
@@ -37,6 +43,12 @@
   background-position: center;
   background-color: #2a2a2a;
   position: relative;
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-card:hover .card-image {
+  transform: scale(1.05);
 }
 
 .card-content {
@@ -82,13 +94,14 @@
   border-radius: 10px;
   font-size: 1rem;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: "BPDotsSquare", sans-serif;
 }
 
 .tag:hover {
   background: var(--color-accent);
   color: #0a0a0a;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {

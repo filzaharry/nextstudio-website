@@ -40,16 +40,25 @@ document.addEventListener("componentsLoaded", () => {
       borderRadius: 5,
     });
 
-    const followEase = 0.18;
+    // Smoother easing for premium feel
+    const followEase = 0.12;
     const targetPos = { x: 0, y: 0 };
     const currentPos = { x: 0, y: 0 };
     let scrollProgress = 0;
     const STOP_FOLLOW_AT = 0.2;
+    let isHovering = false;
 
     function followLoop() {
+      // Smoother interpolation
       currentPos.x += (targetPos.x - currentPos.x) * followEase;
       currentPos.y += (targetPos.y - currentPos.y) * followEase;
-      gsap.set(heroVideo, { x: currentPos.x, y: currentPos.y });
+
+      // Smoother transition using GSAP
+      gsap.set(heroVideo, {
+        x: currentPos.x,
+        y: currentPos.y,
+        force3D: true,
+      });
       rafId = requestAnimationFrame(followLoop);
     }
     followLoop();
@@ -61,18 +70,39 @@ document.addEventListener("componentsLoaded", () => {
       const videoW = heroVideo.offsetWidth || SMALL.width;
       const videoH = heroVideo.offsetHeight || SMALL.height;
 
+      // Check if pointer is within the video zone container
+      const isInContainer = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+
+      // Only follow cursor if inside the container
+      if (!isInContainer) {
+        if (isHovering) {
+          isHovering = false;
+          // Smoothly return to center when leaving
+          targetPos.x = 0;
+          targetPos.y = 0;
+          gsap.to(heroVideo, {
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        }
+        return;
+      }
+
+      isHovering = true;
       let cx = e.clientX;
       let cy = e.clientY;
 
-      const minX = rect.left + videoW / 2;
-      const maxX = rect.right - videoW / 2;
-      const minY = rect.top + videoH / 2;
-      const maxY = rect.bottom - videoH / 2;
+      // Add padding to keep video fully inside container
+      const padding = 10;
+      const minX = rect.left + videoW / 2 + padding;
+      const maxX = rect.right - videoW / 2 - padding;
+      const minY = rect.top + videoH / 2 + padding;
+      const maxY = rect.bottom - videoH / 2 - padding;
 
-      if (cx < minX) cx = minX;
-      if (cx > maxX) cx = maxX;
-      if (cy < minY) cy = minY;
-      if (cy > maxY) cy = maxY;
+      // Clamp cursor position within container bounds
+      cx = Math.max(minX, Math.min(maxX, cx));
+      cy = Math.max(minY, Math.min(maxY, cy));
 
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
@@ -80,12 +110,21 @@ document.addEventListener("componentsLoaded", () => {
       targetPos.x = cx - centerX;
       targetPos.y = cy - centerY;
 
-      heroVideo.style.opacity = "1";
+      gsap.to(heroVideo, {
+        opacity: 1,
+        duration: 0.2,
+        ease: "power2.out",
+      });
     };
 
     const onLeave = () => {
       if (scrollProgress < STOP_FOLLOW_AT) {
-        heroVideo.style.opacity = "0";
+        isHovering = false;
+        gsap.to(heroVideo, {
+          opacity: 0,
+          duration: 0.35,
+          ease: "power2.out",
+        });
         targetPos.x = 0;
         targetPos.y = 0;
       }
@@ -101,16 +140,21 @@ document.addEventListener("componentsLoaded", () => {
         scrollTrigger: {
           trigger: ".hero3d",
           start: "top top",
-          end: "+=1200", // Increased for a better "pause" phase
-          scrub: 1,
+          end: "+=1200",
+          scrub: 1.2, // Slightly increased for smoother scrolling
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,
+          fastScrollEnd: true,
           onUpdate: (self) => {
             scrollProgress = self.progress;
             if (scrollProgress >= STOP_FOLLOW_AT) {
               targetPos.x = 0;
               targetPos.y = 0;
+              if (isHovering) {
+                isHovering = false;
+                gsap.to(heroVideo, { opacity: 1, duration: 0.3 });
+              }
             }
           },
         },
@@ -170,7 +214,7 @@ document.addEventListener("componentsLoaded", () => {
     gsap.set(videoZone, {
       x: 0,
       y: 0,
-      opacity: 1,
+      opacity: 0, // Initially hidden
       display: "block",
     });
 
@@ -182,7 +226,7 @@ document.addEventListener("componentsLoaded", () => {
       width: "100%",
       height: "100%",
       borderRadius: 15,
-      opacity: 1,
+      opacity: 0, // Initially hidden
       display: "block",
     });
   }
@@ -204,10 +248,30 @@ document.addEventListener("componentsLoaded", () => {
       cancelRafLoop();
       applyMobileHeroState();
 
+      // Dedicated trigger to show video on scroll for mobile
+      const mobileVideoTrigger = ScrollTrigger.create({
+        trigger: ".hero3d",
+        start: "top top-=5", // Show as soon as scroll starts
+        onToggle: (self) => {
+          gsap.to([videoZone, heroVideo], {
+            opacity: self.isActive ? 1 : 0,
+            duration: self.isActive ? 0.6 : 0.4,
+            ease: "power2.out",
+          });
+        },
+        onRefresh: (self) => {
+          // Sync state on refresh (e.g. resize)
+          gsap.set([videoZone, heroVideo], {
+            opacity: self.isActive ? 1 : 0,
+          });
+        },
+      });
+
       return () => {
         killOnlyHeroTriggers();
         cancelRafLoop();
-        applyMobileHeroState();
+        mobileVideoTrigger.kill();
+        resetHeroInlineStyles();
       };
     },
   });

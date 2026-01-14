@@ -247,7 +247,11 @@ main {
   color: #000;
   cursor: pointer;
 
-  transition: color 220ms ease;
+  transition: color 280ms cubic-bezier(0.16, 1, 0.3, 1), transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ns-bottom-btn:hover {
+  transform: scale(1.02);
 }
 
 .ns-bottom-btn.is-active {

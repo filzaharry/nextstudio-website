@@ -206,23 +206,63 @@ export function initThreeScene() {
     tgtY = 0,
     curX = 0,
     curY = 0;
-  const EASE = 0.22;
-  const MAX_X = THREE.MathUtils.degToRad(26);
-  const MAX_Y = THREE.MathUtils.degToRad(38);
+
+  // Smoother easing for more fluid rotation
+  const EASE = 0.12; // Reduced for smoother motion
+  const MAX_X = THREE.MathUtils.degToRad(22); // Slightly reduced range
+  const MAX_Y = THREE.MathUtils.degToRad(32);
+
+  // Scroll-based rotation control
+  let isScrolling = false;
+  let scrollTimeout = null;
+  let lastScrollY = window.scrollY;
+  const SCROLL_RESET_DELAY = 150; // ms to wait before re-enabling mouse rotation
 
   function setStaticRotation() {
     tgtX = 0;
     tgtY = 0;
-    curX = 0;
-    curY = 0;
   }
 
+  // Smooth reset rotation during scroll
+  function handleScroll() {
+    isScrolling = true;
+
+    // Reset target rotation towards base when scrolling
+    tgtX = 0;
+    tgtY = 0;
+
+    // Clear previous timeout
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout);
+    }
+
+    // Set timeout to re-enable mouse-based rotation after scrolling stops
+    scrollTimeout = setTimeout(() => {
+      isScrolling = false;
+      lastScrollY = window.scrollY;
+    }, SCROLL_RESET_DELAY);
+  }
+
+  window.addEventListener("scroll", handleScroll, { passive: true });
+
   function canHoverRotate() {
-    return !isMobile() && window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    return !isMobile() && !isScrolling && window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   }
 
   function onPointerMove(e) {
+    // Don't update rotation if scrolling or on mobile
+    if (isScrolling || isMobile()) return;
+
     const rect = getHostRect();
+
+    // Only respond to pointer if it's within or near the hero area
+    const isNearHero = e.clientY < rect.bottom + 100;
+    if (!isNearHero) {
+      tgtX = 0;
+      tgtY = 0;
+      return;
+    }
+
     const x = (e.clientX - rect.left) / Math.max(1, rect.width);
     const y = (e.clientY - rect.top) / Math.max(1, rect.height);
     const nx = x * 2 - 1;
@@ -245,8 +285,11 @@ export function initThreeScene() {
 
   renderer.setAnimationLoop(() => {
     if (model) {
+      // Smooth interpolation with even smoother easing
       curX += (tgtX - curX) * EASE;
       curY += (tgtY - curY) * EASE;
+
+      // Apply rotation with base values
       model.rotation.x = BASE_ROT_X + curX;
       model.rotation.y = BASE_ROT_Y + curY;
       model.rotation.z = BASE_ROT_Z;

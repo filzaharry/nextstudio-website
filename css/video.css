@@ -63,7 +63,7 @@
     height: clamp(180px, 32vh, 320px) !important;
     border-radius: 15px !important;
     z-index: 10 !important;
-    opacity: 1 !important;
+    opacity: 0;
   }
 
   .hero-video {
@@ -75,7 +75,7 @@
     border-radius: inherit !important;
     transform: none !important;
     display: block !important;
-    opacity: 1 !important;
+    opacity: 0;
   }
 }
 
@@ -83,10 +83,10 @@
   .hero-video-zone {
     max-width: 460px !important;
     height: 180px !important;
-    background-color: red;
+    width: calc(100% - 40px) !important;
   }
   .hero-video {
-    width: 160px;
-    height: 180px !important;
+    width: 100% !important;
+    height: 100% !important;
   }
 }

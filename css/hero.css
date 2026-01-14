@@ -16,6 +16,7 @@
 .hero3d {
   position: relative;
   min-height: 100vh;
+  margin-top: -5rem;
   width: 100%;
 }
 
@@ -25,14 +26,17 @@
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Background text centered */
 .hero3d .fx-lines {
-  position: absolute !important;
-  left: 50% !important;
-  top: 50% !important;
-  transform: translate(-50%, -50%) !important;
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
 
   width: calc(100% - 160px) !important;
   max-width: 1500px !important;
@@ -109,10 +113,10 @@
   }
 
   .hero3d .fx-lines {
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
 
     padding: 0 !important;
 
@@ -177,16 +181,19 @@
     pointer-events: none;
     z-index: 1;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .hero3d .fx-lines,
   .hero3d img.fx-lines {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
 
-    width: calc(100% - 80px) !important;
+    width: calc(100% - 60px) !important;
     max-width: 720px !important;
     height: auto !important;
 
@@ -204,7 +211,4 @@
 }
 
 @media (max-width: 600px) {
-  .hero {
-    padding-top: 100px;
-  }
 }

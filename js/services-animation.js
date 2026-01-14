@@ -162,11 +162,12 @@ document.addEventListener("componentsLoaded", async () => {
 
   const sticky = section.querySelector(".services-sticky");
   const titleWrap = document.getElementById("titleWrap");
-  const titleLetters = Array.from(document.querySelectorAll("#servicesTitle .letter"));
+  const cardsViewport = document.getElementById("cardsViewport");
   const cardsContainer = document.getElementById("cardsContainer");
+  const titleLetters = Array.from(document.querySelectorAll("#servicesTitle .letter"));
 
   // Re-check elements after rendering
-  if (!sticky || !titleWrap || !cardsContainer || !titleLetters.length) return;
+  if (!sticky || !titleWrap || !cardsViewport || !cardsContainer || !titleLetters.length) return;
 
   function clamp(n, a, b) {
     return Math.max(a, Math.min(b, n));
@@ -204,6 +205,11 @@ document.addEventListener("componentsLoaded", async () => {
     titleWrap.style.opacity = String(ingress * egress);
     titleWrap.style.transform = `translateY(${p * (isMobile ? -580 : -520)}px)`;
 
+    // Cards Visibility: Hide cards until title is fully done (scroll > 0.3)
+    const cardsOpacity = clamp((scroll - textEnd) / 0.05, 0, 1);
+    cardsViewport.style.opacity = String(cardsOpacity);
+    cardsViewport.style.visibility = cardsOpacity > 0 ? "visible" : "hidden";
+
     const maxScroll = Math.max(0, cardsContainer.scrollHeight - vh);
     const entrance = (1 - p) * (isMobile ? 580 : 480);
     cardsContainer.style.transform = `translateY(${entrance - p * maxScroll}px)`;
@@ -225,8 +231,10 @@ document.addEventListener("componentsLoaded", async () => {
       end: getEnd,
       pin: sticky,
       pinSpacing: true,
-      scrub: 1.4,
+      scrub: 1.5, // Slightly higher for ultra-smooth scrolling
       anticipatePin: 1,
+      fastScrollEnd: true,
+      invalidateOnRefresh: true,
       onUpdate: (self) => render(self.progress),
       onRefresh: (self) => render(self.progress),
     });

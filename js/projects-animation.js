@@ -101,7 +101,7 @@ document.addEventListener("componentsLoaded", () => {
       start: "top top",
       pin: pinEl,
       pinSpacing: true,
-      scrub: 0.75,
+      scrub: 1.1, // Increased for smoother scrolling
       anticipatePin: 1,
       fastScrollEnd: true,
       invalidateOnRefresh: true,
