@@ -1,0 +1,57 @@
+<section class="nx-screen nx-screen-1 is-active" data-step="1">
+  <div class="nx-leftBlock">
+    <div class="nx-field">
+      <div class="nx-labelRow"><span class="nx-label">First name*</span></div>
+      <input class="nx-inputLine" id="nxFirstName" name="firstName" placeholder="Jaden" required />
+      <div class="nx-line"></div>
+      <div class="nx-fieldError"></div>
+    </div>
+
+    <div class="nx-field">
+      <div class="nx-labelRow"><span class="nx-label">Last name*</span></div>
+      <input class="nx-inputLine" id="nxLastName" name="lastName" placeholder="Brown" required />
+      <div class="nx-line"></div>
+      <div class="nx-fieldError"></div>
+    </div>
+
+    <div class="nx-field">
+      <div class="nx-labelRow"><span class="nx-label">Phone number*</span></div>
+      <div class="nx-phoneGrid">
+        <div class="nx-prefixWrap">
+          <select class="nx-prefixSelect" id="nxPhonePrefix" name="phonePrefix" aria-label="Phone prefix"></select>
+          <span class="nx-prefixChevron" aria-hidden="true"></span>
+          <div class="nx-line nx-lineStrong"></div>
+        </div>
+
+        <div class="nx-numberWrap">
+          <input class="nx-inputLine" id="nxPhoneNumber" name="phoneNumber" placeholder="602 642 278" required />
+          <div class="nx-line"></div>
+        </div>
+      </div>
+      <div class="nx-fieldError"></div>
+      <input type="hidden" id="nxPhone" name="phone" value="" />
+    </div>
+
+    <div class="nx-field">
+      <div class="nx-labelRow"><span class="nx-label">Email*</span></div>
+      <input class="nx-inputLine" id="nxEmail" name="email" placeholder="name@example.com" required />
+      <div class="nx-line"></div>
+      <div class="nx-fieldError"></div>
+    </div>
+
+    <div class="nx-field">
+      <div class="nx-labelRow"><span class="nx-label">Company</span></div>
+      <input class="nx-inputLine" id="nxCompany" name="company" placeholder="Example Corporation" />
+      <div class="nx-line"></div>
+      <div class="nx-fieldError"></div>
+    </div>
+
+    <div class="nx-stepFooter">
+      <button class="nx-navBtn nx-exitOnly" type="button" data-contact-close>
+        <span class="nx-navArrow">←</span>
+        <span class="nx-navText">Exit</span>
+      </button>
+      <button class="nx-ctaBtn" type="button" data-contact-next>Continue</button>
+    </div>
+  </div>
+</section>

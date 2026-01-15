@@ -114,22 +114,41 @@ html.nx-modal-lock body {
   display: block;
 }
 
-/* Content Scroll Area */
+/* Content Area */
 .nx-cardInner {
   position: relative;
   z-index: 2;
   flex: 1;
-  overflow: auto;
-  padding: 88px 90px 140px 90px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 100px 90px; /* Standard desktop padding */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 0; /* Allow container to shrink */
 }
 
 /* Screens */
 .nx-screen {
   display: none;
-  min-height: 100%;
+  width: 100%;
+  animation: nxFadeIn 0.4s ease forwards;
+}
+@keyframes nxFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .nx-screen.is-active {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Layout blocks */
@@ -191,21 +210,21 @@ html.nx-modal-lock body {
 }
 
 .nx-line {
-  height: 3px;
+  height: 2px;
   width: 100%;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 1);
   transition: background 0.4s ease;
 }
 .nx-modal.is-dark .nx-line {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 1);
 }
 .nx-lineStrong {
-  height: 3px;
-  background: rgba(0, 0, 0, 0.55);
+  height: 2px;
+  background: rgba(0, 0, 0, 1);
   transition: background 0.4s ease;
 }
 .nx-modal.is-dark .nx-lineStrong {
-  background: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 1);
 }
 
 /* Phone grid */
@@ -257,7 +276,7 @@ html.nx-modal-lock body {
   margin-bottom: 18px;
 }
 .nx-groupTitle {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: rgba(0, 0, 0, 0.65);
   margin-bottom: 10px;
 }
@@ -279,7 +298,7 @@ html.nx-modal-lock body {
   background: rgba(0, 0, 0, 0.06);
   border-radius: 999px;
   padding: 9px 14px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: rgba(0, 0, 0, 0.85);
   display: inline-flex;
   align-items: center;
@@ -319,29 +338,36 @@ html.nx-modal-lock body {
   background: rgba(255, 255, 255, 0.9);
 }
 
-/* Footer Fixed Bottom */
+/* Step Footer (Dynamic) */
+.nx-stepFooter {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Footer Fixed Bottom (Breadcrumbs & Logo only) */
 .nx-cardFooter {
-  position: sticky;
-  bottom: 0;
+  position: relative;
   z-index: 4;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 18px;
   padding: 0 90px 44px 90px;
   background: transparent;
+  flex-shrink: 0;
 }
 
 .nx-footerLeft {
-  display: inline-flex;
-  align-items: center;
-  gap: 16px;
+  display: none; /* Navigation moved to steps */
 }
 .nx-footerRight {
   margin-left: auto;
   display: inline-flex;
   align-items: center;
   gap: 24px;
+  font-size: var(--font-size-sm) !important;
 }
 
 .nx-footerImg {
@@ -360,18 +386,21 @@ html.nx-modal-lock body {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.85);
-  padding: 10px 0;
+  color: #000;
+  padding: 12px 0;
   transition: color 0.4s ease;
 }
 .nx-modal.is-dark .nx-navBtn {
   color: rgba(255, 255, 255, 0.85);
 }
 .nx-navArrow {
-  font-size: 16px;
+  font-size: var(--font-size-sm);
   line-height: 1;
+}
+.nx-navText {
+  font-size: var(--font-size-sm);
 }
 
 .nx-ctaBtn {
@@ -379,14 +408,15 @@ html.nx-modal-lock body {
   cursor: pointer;
   background: #e35b2f;
   color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 12px 24px;
-  border-radius: 10px;
-  transition: opacity 0.2s;
+  font-size: var(--font-size-sm);
+  font-weight: 300;
+  padding: 14px 32px;
+  border-radius: 12px;
+  transition: opacity 0.2s, transform 0.2s;
 }
 .nx-ctaBtn:hover {
   opacity: 0.9;
+  transform: translateY(-2px);
 }
 
 /* Breadcrumb */
@@ -417,12 +447,12 @@ html.nx-modal-lock body {
 
 /* Success State */
 .nx-successBlock {
-  width: 900px;
   max-width: 100%;
 }
 .nx-successTitle {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 78px;
+  font-family: "BPdots", monospace !important;
+  font-weight: 700;
+  font-size: 160px;
   line-height: 1;
   letter-spacing: 0.02em;
   color: rgba(0, 0, 0, 0.95);
@@ -433,7 +463,7 @@ html.nx-modal-lock body {
 }
 .nx-successSub {
   margin-top: 12px;
-  font-size: 22px;
+  font-size: var(--font-size-lg);
   color: rgba(0, 0, 0, 0.85);
   transition: color 0.4s ease;
 }
@@ -442,6 +472,17 @@ html.nx-modal-lock body {
 }
 
 /* Errors & Loading */
+.nx-fieldError {
+  display: none;
+  font-size: 11px;
+  color: #e35b2f;
+  margin-top: 6px;
+  font-weight: 400;
+}
+.nx-fieldError.is-visible {
+  display: block;
+}
+
 .nx-error {
   display: none;
   position: absolute;
@@ -453,6 +494,29 @@ html.nx-modal-lock body {
 }
 .nx-error.is-visible {
   display: block;
+}
+
+/* Toast Notification (Snackbar) */
+.nx-toast {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  z-index: 1000;
+  background: #e35b2f;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.nx-toast.is-visible {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .nx-spinner {
@@ -482,25 +546,83 @@ html.nx-modal-lock body {
   cursor: pointer;
 }
 
-/* Mobile Adjustments */
-@media (max-width: 900px) {
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
   .nx-cardInner {
-    padding: 76px 20px 150px 20px;
+    padding: 80px 60px;
   }
   .nx-cardFooter {
-    padding: 0 20px 22px 20px;
+    padding: 0 60px 40px 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nx-closeBtn {
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+  }
+  .nx-cardInner {
+    padding: 60px 0;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 100px;
+  }
+  .nx-screen {
+    width: 80vw;
+  }
+  .nx-cardFooter {
+    padding: 24px;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 32px;
   }
   .nx-footerRight {
-    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
   }
-  .nx-error {
-    left: 20px;
+  .nx-breadcrumb {
+    font-size: 10px;
   }
   .nx-successTitle {
-    font-size: 46px;
+    font-size: 80px;
   }
-  .nx-successSub {
-    font-size: 16px;
+  .nx-leftBlock,
+  .nx-leftBlockWide {
+    width: 100%;
+  }
+  .nx-stepFooter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .nx-ctaBtn {
+    width: 100%;
+    text-align: center;
+  }
+  .nx-toast {
+    top: auto;
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    text-align: center;
+    transform: translateY(20px);
+  }
+  .nx-toast.is-visible {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .nx-successTitle {
+    font-size: 56px;
+  }
+  .nx-breadcrumb {
+    display: none; /* Hide on very small screens to save space */
   }
 }
 

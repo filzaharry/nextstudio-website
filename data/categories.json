@@ -1,0 +1,18 @@
+[
+  {
+    "category": "Brand Design",
+    "services": ["Logo Design", "Rebranding", "Visual Identity", "Messaging", "Brand Guidelines"]
+  },
+  {
+    "category": "Digital Development",
+    "services": ["Web Design", "Webflow Build", "Apps Development", "UI", "UX", "Automatization"]
+  },
+  {
+    "category": "Motion and 3D",
+    "services": ["Motion Graphics", "3D Visuals", "Animations", "Product Renders", "Promo Visuals"]
+  },
+  {
+    "category": "Campaigns",
+    "services": ["Ad Creative", "Strategy", "Ads", "Content Campaigns", "Social Campaigns"]
+  }
+]

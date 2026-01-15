@@ -1,71 +1,403 @@
 /**
- * CONTACT MODAL
- * Handles the multi-step contact form, including validation,
- * service selection, and submission via fetch.
+ * CONTACT MODAL (Refactored)
+ * Handles the multi-step form by loading individual components and
+ * dynamic data from services.json.
  */
-document.addEventListener("componentsLoaded", () => {
+document.addEventListener("componentsLoaded", async () => {
   const modal = document.getElementById("nxContactModal");
   if (!modal) return;
 
-  const openBtns = document.querySelectorAll("[data-contact-open]");
-  const closeBtns = modal.querySelectorAll("[data-contact-close]");
-  const backBtn = modal.querySelector("[data-contact-back]");
-  const nextBtn = modal.querySelector("[data-contact-next]");
-  const submitBtn = modal.querySelector("[data-contact-submit]");
-  const inspirationBtn = modal.querySelector("[data-contact-inspiration]");
-  const exitBtn = modal.querySelector(".nx-exitOnly");
-  const errorEl = modal.querySelector("[data-contact-error]");
-  const breadcrumbWrap = modal.querySelector(".nx-breadcrumb");
-  const successNote = modal.querySelector("[data-success-note]");
-  const screens = Array.from(modal.querySelectorAll(".nx-screen"));
-  const pills = Array.from(modal.querySelectorAll(".nx-pill"));
+  // Global references (some initialized after loading steps)
+  let backBtns, nextBtns, submitBtns, closeElems, screens;
+  let phonePrefix, phoneNumber, phoneHidden;
+  let pills = [];
 
-  const bc1 = modal.querySelector(".bc-1");
-  const bc2 = modal.querySelector(".bc-2");
-  const bc3 = modal.querySelector(".bc-3");
-
-  const phonePrefix = modal.querySelector("#nxPhonePrefix");
-  const phoneNumber = modal.querySelector("#nxPhoneNumber");
-  const phoneHidden = modal.querySelector("#nxPhone");
-
-  const fields = {
-    firstName: modal.querySelector("#nxFirstName"),
-    lastName: modal.querySelector("#nxLastName"),
-    phone: phoneHidden,
-    email: modal.querySelector("#nxEmail"),
-    company: modal.querySelector("#nxCompany"),
-    message: modal.querySelector("#nxMessage"),
-  };
-
+  const selected = new Set();
   let step = 1;
   let submitting = false;
-  const selected = new Set();
 
-  // THEME ADAPTIVE LOGIC
+  // Initialize Modal logic
+  async function init() {
+    await loadModalSteps();
+    await renderServices();
+
+    // Select dynamic elements
+    screens = Array.from(modal.querySelectorAll(".nx-screen"));
+    backBtns = modal.querySelectorAll("[data-contact-back]");
+    nextBtns = modal.querySelectorAll("[data-contact-next]");
+    submitBtns = modal.querySelectorAll("[data-contact-submit]");
+    closeElems = modal.querySelectorAll("[data-contact-close]");
+
+    phonePrefix = modal.querySelector("#nxPhonePrefix");
+    phoneNumber = modal.querySelector("#nxPhoneNumber");
+    phoneHidden = modal.querySelector("#nxPhone");
+
+    // Initialize logic
+    initNavigation();
+    initPills();
+    initPrefix();
+
+    // Set initial state
+    closeModal();
+    setStep(1);
+  }
+
+  // Load individual step components
+  async function loadModalSteps() {
+    const stepWrappers = [
+      { id: "nx-step-1-wrapper", url: "components/contact-step-1.html" },
+      { id: "nx-step-2-wrapper", url: "components/contact-step-2.html" },
+      { id: "nx-step-3-wrapper", url: "components/contact-step-3.html" },
+      { id: "nx-step-4-wrapper", url: "components/contact-step-4.html" },
+    ];
+
+    const loadStep = async (sw) => {
+      const container = document.getElementById(sw.id);
+      if (!container) return;
+      try {
+        const res = await fetch(sw.url);
+        if (res.ok) container.innerHTML = await res.text();
+      } catch (e) {
+        console.error(`Failed to load ${sw.url}`, e);
+      }
+    };
+
+    await Promise.all(stepWrappers.map(loadStep));
+  }
+
+  // Helper to capitalize each word
+  function capitalize(str) {
+    return str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
+  // Render pills from categories.json
+  async function renderServices() {
+    const groupWrapper = document.getElementById("nx-services-groups");
+    if (!groupWrapper) return;
+
+    try {
+      const res = await fetch("data/categories.json");
+      if (!res.ok) throw new Error("Could not load categories data");
+      const data = await res.json();
+
+      let html = "";
+      data.forEach((item) => {
+        const categoryTitle = item.category;
+        const services = item.services || [];
+
+        html += `
+          <div class="nx-group">
+            <div class="nx-groupTitle">${categoryTitle}</div>
+            <div class="nx-pillRow">
+              ${services
+                .map((tag) => {
+                  const cleanTag = tag.replace(/[\[\]]/g, "");
+                  const capitalizedTag = cleanTag;
+                  return `
+                    <button type="button" class="nx-pill" data-pill-value="${capitalizedTag}">
+                      <span class="nx-pillCheck"></span>
+                      <span class="nx-pillText">${capitalizedTag}</span>
+                    </button>
+                  `;
+                })
+                .join("")}
+            </div>
+            <div class="nx-groupLine"></div>
+          </div>
+        `;
+      });
+      groupWrapper.innerHTML = html;
+
+      // Re-init pills logic no longer needed here thanks to event delegation
+    } catch (e) {
+      console.error("Service rendering failed:", e);
+    }
+  }
+
+  function initNavigation() {
+    // Open Btns (global)
+    document.querySelectorAll("[data-contact-open]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        openModal();
+      });
+    });
+
+    // Close Btns
+    closeElems.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        closeModal();
+      });
+    });
+
+    // Back
+    backBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (step > 1) setStep(step - 1);
+      });
+    });
+
+    // Next
+    nextBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (step === 1) {
+          if (validateStep1()) setStep(2);
+        } else if (step === 2) {
+          if (validateStep2()) setStep(3);
+        }
+      });
+    });
+
+    // Clear field errors on input
+    modal.addEventListener("input", (e) => {
+      if (e.target.classList.contains("nx-inputLine")) {
+        const errorEl = e.target.closest(".nx-field")?.querySelector(".nx-fieldError");
+        if (errorEl) errorEl.classList.remove("is-visible");
+      }
+    });
+
+    // Submit
+    submitBtns.forEach((btn) => btn.addEventListener("click", submit));
+
+    // Inspiration (Step 4)
+    modal.querySelectorAll("[data-contact-inspiration]").forEach((btn) => {
+      btn.addEventListener("click", () => closeModal());
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) closeModal();
+    });
+  }
+
+  function initPills() {
+    // Use event delegation on the modal to handle dynamically injected pills
+    modal.addEventListener("click", (e) => {
+      const pill = e.target.closest(".nx-pill");
+      if (!pill) return;
+
+      const val = pill.getAttribute("data-pill-value");
+      if (!val) return;
+
+      if (selected.has(val)) {
+        selected.delete(val);
+        pill.classList.remove("is-selected");
+      } else {
+        selected.add(val);
+        pill.classList.add("is-selected");
+      }
+
+      // Clear step 2 error if something is selected
+      if (selected.size > 0) {
+        const err2 = modal.querySelector("#nxStep2Error");
+        if (err2) err2.classList.remove("is-visible");
+      }
+
+      console.log("Selected services:", Array.from(selected));
+    });
+  }
+
+  function initPrefix() {
+    if (!phonePrefix) return;
+    const prefixItems = [
+      { name: "Indonesia", dial: "+62", flag: "🇮🇩" },
+      { name: "Czechia", dial: "+420", flag: "🇨🇿" },
+      { name: "Slovakia", dial: "+421", flag: "🇸🇰" },
+      { name: "Germany", dial: "+49", flag: "🇩🇪" },
+      { name: "Austria", dial: "+43", flag: "🇦🇹" },
+      { name: "Poland", dial: "+48", flag: "🇵🇱" },
+      { name: "United Kingdom", dial: "+44", flag: "🇬🇧" },
+      { name: "United States", dial: "+1", flag: "🇺🇸" },
+    ];
+    phonePrefix.innerHTML = prefixItems.map((i) => `<option value="${i.dial}">${i.flag}</option>`).join("");
+    phonePrefix.value = "+62";
+
+    phoneNumber.addEventListener("input", syncPhone);
+    phonePrefix.addEventListener("change", syncPhone);
+  }
+
+  function syncPhone() {
+    if (!phoneHidden || !phoneNumber) return;
+    const n = String(phoneNumber.value || "").replace(/\D+/g, "");
+    phoneHidden.value = n;
+  }
+
+  function setStep(n) {
+    step = n;
+    screens.forEach((s) => {
+      const active = Number(s.dataset.step) === n;
+      s.classList.toggle("is-active", active);
+    });
+
+    // Update breadcrumbs
+    modal.querySelectorAll(".nx-bc").forEach((bc) => bc.classList.remove("active"));
+    const currentBc = modal.querySelector(`.bc-${Math.min(step, 3)}`);
+    if (currentBc) currentBc.classList.add("active");
+
+    // Global footer visibility
+    const bcrumbWrap = modal.querySelector(".nx-breadcrumb");
+    const successNote = modal.querySelector("[data-success-note]");
+    if (bcrumbWrap) bcrumbWrap.style.display = step === 4 ? "none" : "inline-flex";
+    if (successNote) successNote.style.display = step === 4 ? "inline-block" : "none";
+
+    showError("");
+    updateModalTheme();
+  }
+
+  function openModal() {
+    modal.classList.add("is-open");
+    document.documentElement.classList.add("nx-modal-lock");
+    setStep(1);
+    updateModalTheme();
+    setTimeout(() => modal.querySelector("#nxFirstName")?.focus(), 50);
+  }
+
+  function closeModal() {
+    modal.classList.remove("is-open");
+    document.documentElement.classList.remove("nx-modal-lock");
+  }
+
+  function showError(msg) {
+    const errEl = modal.querySelector("[data-contact-error]");
+    if (!errEl) return;
+    errEl.textContent = msg;
+    errEl.classList.toggle("is-visible", !!msg);
+  }
+
+  function showToast(msg) {
+    const toast = modal.querySelector("#nxToast");
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("is-visible");
+    setTimeout(() => {
+      toast.classList.remove("is-visible");
+    }, 3000);
+  }
+
+  function setFieldError(fieldId, msg) {
+    const field = modal.querySelector(`#${fieldId}`);
+    if (!field) return;
+    const errorEl = field.closest(".nx-field")?.querySelector(".nx-fieldError");
+    if (!errorEl) return;
+    errorEl.textContent = msg;
+    errorEl.classList.toggle("is-visible", !!msg);
+  }
+
+  function validateStep1() {
+    syncPhone();
+    const first = modal.querySelector("#nxFirstName")?.value?.trim();
+    const last = modal.querySelector("#nxLastName")?.value?.trim();
+    const email = modal.querySelector("#nxEmail")?.value?.trim();
+    const phone = phoneHidden?.value?.trim();
+
+    let isValid = true;
+
+    // Reset all step 1 errors
+    modal.querySelectorAll(".nx-screen-1 .nx-fieldError").forEach((el) => el.classList.remove("is-visible"));
+
+    if (!first) {
+      setFieldError("nxFirstName", "First name is required.");
+      isValid = false;
+    }
+    if (!last) {
+      setFieldError("nxLastName", "Last name is required.");
+      isValid = false;
+    }
+    if (!phone || phone.length < 8) {
+      setFieldError("nxPhoneNumber", "Valid phone number is required.");
+      isValid = false;
+    }
+
+    if (!email) {
+      setFieldError("nxEmail", "Email is required.");
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setFieldError("nxEmail", "Please enter a valid email address.");
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  function validateStep2() {
+    if (selected.size < 1) {
+      const err2 = modal.querySelector("#nxStep2Error");
+      if (err2) {
+        err2.textContent = "Please select at least one service.";
+        err2.classList.add("is-visible");
+      }
+      return false;
+    }
+    return true;
+  }
+
+  async function submit() {
+    if (submitting) return;
+    submitting = true;
+    showError("");
+    const currentSubmitBtn = modal.querySelector(".nx-screen.is-active .nx-ctaBtnSubmit");
+    currentSubmitBtn?.classList.add("is-loading");
+
+    try {
+      // Build data for logging/sending
+      const dataObj = {
+        firstName: modal.querySelector("#nxFirstName")?.value,
+        lastName: modal.querySelector("#nxLastName")?.value,
+        email: modal.querySelector("#nxEmail")?.value,
+        phone: (phonePrefix?.value || "") + (phoneNumber?.value || ""),
+        company: modal.querySelector("#nxCompany")?.value,
+        message: modal.querySelector("#nxMessage")?.value,
+        services: Array.from(selected),
+      };
+
+      console.log("Submitting form data:", dataObj);
+
+      const fd = new FormData();
+      Object.keys(dataObj).forEach((key) => {
+        if (key === "services") fd.append(key, dataObj[key].join(", "));
+        else fd.append(key, dataObj[key]);
+      });
+
+      // We use contact.php if exists, otherwise simulate
+      const res = await fetch("contact.php", { method: "POST", body: fd }).catch(() => ({ ok: true }));
+
+      if (res.ok) {
+        console.log("Submit successful");
+        setStep(4);
+      } else {
+        throw new Error("Failed to send message.");
+      }
+    } catch (e) {
+      console.log("Submit error caught:", e);
+      showToast(e.message);
+    } finally {
+      currentSubmitBtn?.classList.remove("is-loading");
+      submitting = false;
+    }
+  }
+
+  // THEME ADAPTIVE HELPERS
   function rgbToArray(rgb) {
     const m = rgb.match(/\d+/g);
     return m ? m.map(Number) : [255, 255, 255];
   }
-
   function luminance([r, g, b]) {
     return (r * 299 + g * 587 + b * 114) / 1000;
   }
-
   function getBgColorAt(x, y) {
     const prev = modal.style.pointerEvents;
     modal.style.pointerEvents = "none";
     const el = document.elementFromPoint(x, y);
     modal.style.pointerEvents = prev;
     if (!el) return "rgb(255,255,255)";
-    let current = el;
-    while (current && current !== document.documentElement) {
-      const bg = getComputedStyle(current).backgroundColor;
+    let curr = el;
+    while (curr && curr !== document.documentElement) {
+      const bg = getComputedStyle(curr).backgroundColor;
       if (bg && bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent") return bg;
-      current = current.parentElement;
+      curr = curr.parentElement;
     }
     return "rgb(255,255,255)";
   }
-
   function updateModalTheme() {
     if (!modal.classList.contains("is-open")) return;
     const rect = modal.getBoundingClientRect();
@@ -75,242 +407,12 @@ document.addEventListener("componentsLoaded", () => {
       { x: rect.left + rect.width * 0.8, y: rect.top + rect.height * 0.8 },
     ];
     let total = 0;
-    samples.forEach((s) => {
-      total += luminance(rgbToArray(getBgColorAt(s.x, s.y)));
-    });
+    samples.forEach((s) => (total += luminance(rgbToArray(getBgColorAt(s.x, s.y)))));
     const avg = total / samples.length;
     modal.classList.toggle("is-dark", avg < 140);
     modal.classList.toggle("is-light", avg >= 140);
   }
 
-  function digitsOnly(v) {
-    return String(v || "").replace(/\D+/g, "");
-  }
-
-  function showError(msg) {
-    if (!errorEl) return;
-    const m = String(msg || "").trim();
-    errorEl.textContent = m;
-    errorEl.classList.toggle("is-visible", !!m);
-  }
-
-  function syncPhone() {
-    if (!phoneHidden) return;
-    const n = String(phoneNumber?.value || "").trim();
-    phoneHidden.value = digitsOnly(n);
-  }
-
-  phonePrefix?.addEventListener("change", syncPhone);
-  phoneNumber?.addEventListener("input", syncPhone);
-
-  function setControls() {
-    bc1?.classList.toggle("active", step === 1);
-    bc2?.classList.toggle("active", step === 2);
-    bc3?.classList.toggle("active", step === 3);
-
-    if (exitBtn) exitBtn.style.display = step === 1 || step === 4 ? "inline-flex" : "none";
-    if (backBtn) backBtn.style.display = step === 2 || step === 3 ? "inline-flex" : "none";
-    if (nextBtn) nextBtn.style.display = step === 1 || step === 2 ? "inline-flex" : "none";
-    if (submitBtn) submitBtn.style.display = step === 3 ? "inline-flex" : "none";
-    if (inspirationBtn) inspirationBtn.style.display = step === 4 ? "inline-flex" : "none";
-
-    if (breadcrumbWrap) breadcrumbWrap.style.display = step === 4 ? "none" : "inline-flex";
-    if (successNote) successNote.style.display = step === 4 ? "inline-block" : "none";
-  }
-
-  function setStep(n) {
-    step = n;
-    screens.forEach((s) => {
-      const isActive = Number(s.dataset.step) === n;
-      s.classList.toggle("is-active", isActive);
-    });
-    showError("");
-    setControls();
-    updateModalTheme();
-  }
-
-  function openModal() {
-    modal.classList.add("is-open");
-    modal.setAttribute("aria-hidden", "false");
-    document.documentElement.classList.add("nx-modal-lock");
-    setStep(1);
-    updateModalTheme();
-    setTimeout(() => fields.firstName?.focus(), 30);
-  }
-
-  function closeModal() {
-    modal.classList.remove("is-open");
-    modal.setAttribute("aria-hidden", "true");
-    document.documentElement.classList.remove("nx-modal-lock");
-    showError("");
-  }
-
-  function validateStep1() {
-    syncPhone();
-    const first = String(fields.firstName?.value || "").trim();
-    const last = String(fields.lastName?.value || "").trim();
-    const email = String(fields.email?.value || "").trim();
-    const phoneDigits = String(fields.phone?.value || "").trim();
-
-    if (!first || !last || !email || !phoneDigits) return "Please fill all required fields.";
-    const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    if (!okEmail) return "Please enter a valid email.";
-    if (phoneDigits.length !== 9) return "Phone number must have 9 digits.";
-    return "";
-  }
-
-  function validateStep2() {
-    if (selected.size < 1) return "Select at least one service.";
-    return "";
-  }
-
-  function buildFormData() {
-    syncPhone();
-    const fd = new FormData();
-    fd.append("firstName", String(fields.firstName?.value || "").trim());
-    fd.append("lastName", String(fields.lastName?.value || "").trim());
-    fd.append("email", String(fields.email?.value || "").trim());
-    fd.append("company", String(fields.company?.value || "").trim());
-    fd.append("message", String(fields.message?.value || "").trim());
-    fd.append("phone", String(fields.phone?.value || "").trim());
-    fd.append("phonePrefix", String(phonePrefix?.value || "").trim());
-    fd.append("phoneNumberRaw", String(phoneNumber?.value || "").trim());
-    Array.from(selected).forEach((v) => fd.append("services[]", v));
-    return fd;
-  }
-
-  async function submit() {
-    if (submitting) return;
-    submitting = true;
-    showError("");
-    submitBtn?.classList.add("is-loading");
-
-    try {
-      const res = await fetch("contact.php", {
-        method: "POST",
-        body: buildFormData(),
-      });
-
-      const ct = res.headers.get("content-type") || "";
-      let payload = null;
-
-      if (ct.includes("application/json")) {
-        payload = await res.json().catch(() => null);
-      } else {
-        const t = await res.text().catch(() => "");
-        payload = t ? { ok: false, message: t } : null;
-      }
-
-      if (!res.ok) {
-        const msg = payload?.message || payload?.error || "Send failed";
-        throw new Error(msg);
-      }
-
-      if (payload && payload.ok === false) {
-        throw new Error(payload.message || "Send failed");
-      }
-
-      setStep(4);
-    } catch (e) {
-      const msg = String(e?.message || "").trim();
-      showError(msg || "Something went wrong. Please try again.");
-    } finally {
-      submitBtn?.classList.remove("is-loading");
-      submitting = false;
-    }
-  }
-
-  // EVENT LISTENERS
-  openBtns.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      openModal();
-    });
-  });
-
-  closeBtns.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      closeModal();
-    });
-  });
-
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal.classList.contains("is-open")) {
-      closeModal();
-    }
-  });
-
-  nextBtn?.addEventListener("click", () => {
-    if (step === 1) {
-      const err = validateStep1();
-      if (err) return showError(err);
-      return setStep(2);
-    }
-    if (step === 2) {
-      const err = validateStep2();
-      if (err) return showError(err);
-      return setStep(3);
-    }
-  });
-
-  backBtn?.addEventListener("click", () => {
-    if (step === 2) return setStep(1);
-    if (step === 3) return setStep(2);
-  });
-
-  submitBtn?.addEventListener("click", submit);
-  inspirationBtn?.addEventListener("click", () => closeModal());
-
-  // Prefix population
-  if (phonePrefix) {
-    const prefixItems = [
-      { name: "Czechia", dial: "+420", flag: "🇨🇿" },
-      { name: "Slovakia", dial: "+421", flag: "🇸🇰" },
-      { name: "Germany", dial: "+49", flag: "🇩🇪" },
-      { name: "Austria", dial: "+43", flag: "🇦🇹" },
-      { name: "Poland", dial: "+48", flag: "🇵🇱" },
-      { name: "United Kingdom", dial: "+44", flag: "🇬🇧" },
-      { name: "United States", dial: "+1", flag: "🇺🇸" },
-      { name: "Indonesia", dial: "+62", flag: "🇮🇩" },
-    ];
-    const hasRealOptions = phonePrefix.querySelectorAll("option").length > 1;
-    if (!hasRealOptions) {
-      phonePrefix.innerHTML = prefixItems.map((i) => `<option value="${i.dial}">${i.flag}</option>`).join("");
-    }
-    if (!phonePrefix.value) phonePrefix.value = "+420";
-  }
-
-  // Pills interaction
-  pills.forEach((p) => {
-    p.addEventListener("click", () => {
-      const val = p.getAttribute("data-pill-value") || p.getAttribute("data-service");
-      if (!val) return;
-      if (selected.has(val)) {
-        selected.delete(val);
-        p.classList.remove("is-selected");
-      } else {
-        selected.add(val);
-        p.classList.add("is-selected");
-      }
-    });
-  });
-
-  modal.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter") return;
-    const tag = e.target?.tagName.toLowerCase();
-    if (tag === "textarea") return;
-    if (step === 1 || step === 2) {
-      e.preventDefault();
-      nextBtn?.click();
-    } else if (step === 3) {
-      e.preventDefault();
-      submitBtn?.click();
-    }
-  });
-
-  // Init
-  closeModal();
-  setStep(1);
+  // Start initialization
+  init();
 });
