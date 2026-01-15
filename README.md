@@ -1,112 +1,78 @@
-# 🚀 Services Section - Scroll Animation Demo
+# 🚀 NextStudio Website - Evolution & Refactor
 
-Interactive scroll-driven animation with a **Modular CSS Architecture** and **Vanilla JavaScript**.
-Key features include sequenced typography animation, sliding hover indicators, and smooth scroll interactions using CSS Variables and `clamp()` logic.
-
----
-
-## 📁 Project Structure
-
-```
-dev-test-filza/
-├── index.html              # Main Entry Point
-├── README.md               # Documentation
-│
-├── components/             # Reusable HTML Components
-│   ├── navbar.html         # Fixed Navigation
-│   ├── title.html          # Animated Title [ S E R V I C E S ]
-│   └── card.html           # Card Template
-│
-├── css/
-│   ├── global.css          # Reset, Variables, Utilities
-│   ├── services-section.css # Main CSS entry point (Imports modules)
-│   └── services/           # Modular CSS Files
-│       ├── layout.css      # Core Layout & Scroll Track
-│       ├── navigation.css  # Navbar Styling & Interaction
-│       ├── title.css       # Title Animation Logic
-│       └── cards.css       # Card Styling
-│
-├── data/
-│   └── services.json       # Dynamic Service Data
-│
-└── js/
-    ├── main.js             # App Initialization & Loader
-    ├── ui/                 # UI Logic
-    │   └── navIndicator.js # Navigation interactions
-    └── scroll/             # Scroll Logic
-        ├── ScrollProgress.js # Monitors scroll % -> Updates CSS var
-        └── titleCardPush.js  # Push effect logic for Title vs Cards
-```
+This project has evolved into a high-end, interactive digital studio website. It features complex GSAP animations, 3D elements, a modular component-based architecture, and an adaptive contact system.
 
 ---
 
-## 🔄 Coding Flow & Architecture
+## 📁 Project Overview & Evolution
 
-### 1️⃣ Initialization (`main.js`)
+The project has undergone a massive refactor, moving from a monolithic structure to a highly modular and maintainable codebase.
 
-The app follows a simple init sequence:
+### 🏗 Architecture
 
-1.  **Load Components**: Fetches `navbar.html` and `title.html` into the DOM.
-2.  **Render Data**: Fetches `services.json`, clones `card.html`, and populates `.cards-wrapper`.
-3.  **Start Logic**:
-    - `initScrollProgress()`: Tracks scroll position (0-1) and updates `--scroll-progress`.
-    - `initTitleCardPush()`: Handles physical collision/push effect between Title and Cards.
-    - `initNavIndicator()`: Sets up navigation UI behaviors.
-
-### 2️⃣ Modular CSS Architecture
-
-We broke down the monolithic CSS into functional modules for better maintainability:
-
-- **`layout.css`**: Handles the recursive height (`300vh`), sticky viewports, and background layers.
-- **`title.css`**: Contains the complex **4-Phase Animation Timeline** for the `[ SERVICES ]` text.
-- **`navigation.css`**: Manages the sliding indicator pill logic using sibling selectors.
-- **`cards.css`**: Styles the content cards and their entrance animations.
+- **Components**: UI is split into reusable HTML fragments (Header, Hero, Services, Projects, Contact Modal, Footer).
+- **Modern CSS**: Uses CSS Variables (tokens) for a unified design system and mobile-first responsiveness.
+- **GSAP & ScrollTrigger**: Drives the cinematic scroll experiences in Hero, Projects, and Services sections.
+- **Dynamic Data**: Category and Service data are decoupled from HTML and managed via `data/categories.json`.
 
 ---
 
-## 🎬 Animation Flow (The "Scroll Timeline")
+## 🛠 Key Features & Implementation
 
-The animation is driven by a single CSS Variable: `--scroll-progress`, calculated in JS.
+### 1️⃣ Adaptive Contact Modal (Multi-Step Refactor)
 
-### 📍 Phase 1: Bracket Spread (0% - 10%)
+The Contact Modal was completely rebuilt to provide a premium user experience:
 
-- **Logic**: `clamp(0, (progress - 0.05) * 10, 1)`
-- The brackets `[ ]` slide open to create space.
+- **Frosted Glass (Glassmorphism)**: Implemented using `backdrop-filter: blur(30px)` and semi-transparent backgrounds.
+- **Adaptive Theming**: Real-time background sampling detects luminance and automatically toggles between `.is-light` and `.is-dark` modes for text contrast.
+- **Modular Steps**: Individual HTML components for each step (`contact-step-1.html` to `contact-step-4.html`).
+- **Dynamic Service Selection**: Multi-select pills are rendered dynamically from `categories.json` with auto-cleansing (removing brackets) and capitalization.
+- **Inline Field Validation**: Error messages appear exactly under the problematic field with real-time clearing as the user types.
+- **Toast Notifications**: Snackbar-style alerts for submission errors in the top-right corner.
 
-### 📍 Phase 2: Text Reveal (10% - 30%)
+### 2️⃣ Cinematic Hero Experience
 
-- **Logic**: Staggered `clamp()` per character.
-- Text **S E R V I C E S** reveals character by character with opacity and blur effects.
+- **Interactive Cursor Follow**: A floating video card follows the cursor with smooth damping (`followEase`).
+- **Edge Adhesion**: As requested by users, the video card now stays visible at the borders when the cursor leaves, rather than fading out.
+- **3D Integration**: Seamless blending of a 3D logo scene with HTML content.
+- **Responsive Scaling**: Video expansion logic adapts from Desktop (737px height) to Tablet (70vh) and Mobile.
 
-### 📍 Phase 3: Reading / Pause (30% - 50%)
+### 3️⃣ Precise Header Typography
 
-- **Static Phase**: The title remains sticky and fully visible to allow user reading.
-- No significant movement occurs here.
+- **Grid-based Layout**: Switched to a 3-6-3 column grid to ensure the middle item starts exactly at the 1/3 mark of the screen.
+- **Multi-Disciplined Alignment**: Left-aligned text within the center block for a structured, modern layout.
 
-### 📍 Phase 4: Exit & Content Entry (50% - 90%)
+### 4️⃣ Optimized Project Showcase
 
-- **Title Push**: As cards scroll up, JS detects collision (`titleCardPush.js`) and physically "pushes" the title upwards.
-- **Cards Enter**: Cards fade in and translate upwards based on scroll progress.
+- **Image Loading Guard**: Animations now wait for all project images to load before calculating positions, preventing "jumping" or incorrect scroll offsets.
+- **Staggered Character Reveals**: High-end typography animations for labels and headlines.
 
 ---
 
-## 🚀 How to Run
+## 🎨 Design System
 
-### Option 1: Node.js (Recommended)
+We use a curated set of CSS variables defined in the global scope:
+
+- `--font-size-xs` to `--font-size-lg`: Unified typography scaling.
+- `--color-primary`: Bright accent color (`#f55629`) for CTA and active indicators.
+- **Adaptive Classes**: `.is-light` and `.is-dark` are propagated throughout the DOM based on background luminance detection.
+
+---
+
+## 🚀 Deployment & Local Development
+
+### Run with Node.js
 
 ```bash
 npx -y serve -l 8080
-# Access: http://localhost:8080
 ```
 
-### Option 2: Python
+_Access at: http://localhost:8080_
 
-```bash
-python3 -m http.server 8080
-```
+### Why a Server is Needed?
 
-> **⚠️ Important**: Do NOT open `index.html` directly (file://). CORS errors will occur due to `fetch()` requests.
+The project uses **ES6 Modules** and `fetch()` for loading HTML components and JSON data. Opening `index.html` directly via the filesystem will cause CORS errors.
 
 ---
 
-_Updated: January 4, 2026_
+_Project Refactored & Documented: January 15, 2026_
