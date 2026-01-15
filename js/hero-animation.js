@@ -77,14 +77,7 @@ document.addEventListener("componentsLoaded", () => {
       if (!isInContainer) {
         if (isHovering) {
           isHovering = false;
-          // Smoothly return to center when leaving
-          targetPos.x = 0;
-          targetPos.y = 0;
-          gsap.to(heroVideo, {
-            opacity: 0,
-            duration: 0.3,
-            ease: "power2.out",
-          });
+          // Keep video at the edge it reached, don't fade or reset to center
         }
         return;
       }
@@ -118,16 +111,8 @@ document.addEventListener("componentsLoaded", () => {
     };
 
     const onLeave = () => {
-      if (scrollProgress < STOP_FOLLOW_AT) {
-        isHovering = false;
-        gsap.to(heroVideo, {
-          opacity: 0,
-          duration: 0.35,
-          ease: "power2.out",
-        });
-        targetPos.x = 0;
-        targetPos.y = 0;
-      }
+      // No longer fading out to 0, just mark as not hovering
+      isHovering = false;
     };
 
     hero3d.addEventListener("pointermove", onMove);
