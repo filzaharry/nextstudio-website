@@ -101,15 +101,15 @@ document.addEventListener("componentsLoaded", () => {
       start: "top top",
       pin: pinEl,
       pinSpacing: true,
-      scrub: 1.1, // Increased for smoother scrolling
+      scrub: 0.8, // Reduced for less stutter/lag
       anticipatePin: 1,
       fastScrollEnd: true,
       invalidateOnRefresh: true,
       end: () => {
         computePositions();
         const travel = Math.abs(startY - endY);
-        const base = mm.matches ? 560 : 880;
-        const extra = Math.min(420, Math.round(travel * (mm.matches ? 0.22 : 0.28)));
+        const base = mm.matches ? 1200 : 1800; // Increased base duration for slower scroll
+        const extra = Math.min(600, Math.round(travel * (mm.matches ? 0.3 : 0.4)));
         return "+=" + (base + extra);
       },
       onEnter: () => section.classList.add("sr-is-animating"),

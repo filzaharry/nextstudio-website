@@ -169,14 +169,25 @@ document.addEventListener("componentsLoaded", async () => {
   // Re-check elements after rendering
   if (!sticky || !titleWrap || !cardsViewport || !cardsContainer || !titleLetters.length) return;
 
+  // Cache dimensions to avoid layout thrashing in render()
+  let vh = window.innerHeight;
+  let vw = window.innerWidth;
+  let maxScroll = 0;
+  let isMobile = vw <= 767;
+
+  function updateDimensions() {
+    vh = window.innerHeight;
+    vw = window.innerWidth;
+    isMobile = vw <= 767;
+    // Force read scrollHeight carefully
+    maxScroll = Math.max(0, cardsContainer.scrollHeight - vh);
+  }
+
   function clamp(n, a, b) {
     return Math.max(a, Math.min(b, n));
   }
 
   function render(progress) {
-    const vh = window.innerHeight;
-    const vw = window.innerWidth;
-    const isMobile = vw <= 767;
     const scroll = clamp(progress, 0, 1);
 
     // TITLE TYPING 0.05..0.3
@@ -210,10 +221,12 @@ document.addEventListener("componentsLoaded", async () => {
     cardsViewport.style.opacity = String(cardsOpacity);
     cardsViewport.style.visibility = cardsOpacity > 0 ? "visible" : "hidden";
 
-    const maxScroll = Math.max(0, cardsContainer.scrollHeight - vh);
     const entrance = (1 - p) * (isMobile ? 580 : 480);
     cardsContainer.style.transform = `translateY(${entrance - p * maxScroll}px)`;
   }
+
+  // Initial calculation
+  updateDimensions();
 
   if (window.gsap && window.ScrollTrigger) {
     const gsap = window.gsap;
@@ -221,8 +234,7 @@ document.addEventListener("componentsLoaded", async () => {
     gsap.registerPlugin(ScrollTrigger);
 
     const getEnd = () => {
-      const vw = window.innerWidth;
-      return vw <= 767 ? "+=2200" : "+=2800";
+      return vw <= 767 ? "+=3500" : "+=4500";
     };
 
     ScrollTrigger.create({
@@ -231,12 +243,15 @@ document.addEventListener("componentsLoaded", async () => {
       end: getEnd,
       pin: sticky,
       pinSpacing: true,
-      scrub: 1.5, // Slightly higher for ultra-smooth scrolling
+      scrub: 0.8, // Reduced for tighter control and less lag/stutter
       anticipatePin: 1,
       fastScrollEnd: true,
       invalidateOnRefresh: true,
       onUpdate: (self) => render(self.progress),
-      onRefresh: (self) => render(self.progress),
+      onRefresh: (self) => {
+        updateDimensions();
+        render(self.progress);
+      },
     });
 
     render(0);
@@ -248,6 +263,7 @@ document.addEventListener("componentsLoaded", async () => {
         const w = window.innerWidth;
         if (Math.abs(w - lastW) < 2) return;
         lastW = w;
+        updateDimensions();
         ScrollTrigger.refresh(true);
       },
       { passive: true }

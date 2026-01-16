@@ -78,6 +78,8 @@ main {
 
 @media (max-width: 900px) {
   .nx-topbar-inner {
+    display: flex;
+    justify-content: space-between;
     width: calc(100% - 80px);
     max-width: 720px;
     padding: 18px 0;
